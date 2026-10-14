@@ -30,11 +30,12 @@ class HashEmbeddingProvider:
 
     name = "hash-v1"
 
-    # 纯词面哈希的语义区分度不足：平衡拒答集上应拒样本均值 0.171、应答样本均值 0.226，
-    # 且"必须拒答"的锚点得分（0.317）高于"必须应答"的锚点（0.152）——不存在能同时
-    # 满足两者的阈值。这里取一个"保证领域内问题不被误拒"的保守值，其拒答指标仅供参考，
+    # 纯词面哈希的语义区分度不足：平衡拒答集上应拒样本均值 0.191、应答样本均值 0.227，
+    # 且"必须拒答"的锚点得分（0.337）高于"必须应答"的锚点（0.135）——不存在能同时
+    # 满足两者的阈值。这里取一个保证领域内问题（如"PM2.5 标准"=0.446）不被误拒、
+    # 同时能拦住明显超纲问题（如"个税专项扣除"=0.159）的保守值；其拒答指标仅供参考，
     # 不能作为线上依据。离线 provider 只用于 CI 回归。
-    default_refusal_threshold = 0.12
+    default_refusal_threshold = 0.18
 
     def __init__(self, dimension: int = 128) -> None:
         self.dimension = dimension
@@ -64,9 +65,14 @@ class HashEmbeddingProvider:
 class SentenceTransformerEmbedding:
     name = "sentence-transformers"
 
-    # BGE 系列默认值：平衡拒答集上扫描得到 0.467（可行区间 0.409~0.537），
-    # 留出集准确率 0.917。换用其它语义模型需要重新标定。
-    default_refusal_threshold = 0.47
+    # BGE 系列默认值：知识库扩容（11 篇/4199 字）后重新标定。
+    # 平衡拒答集上的可行区间为 (0.489, 0.567)，取区间中点 0.53：
+    # 应拒命中 23/24、误拒 4/24、总体准确率 0.896。
+    # 取中点而非样本内最优，是为了对语料/分块变化更稳健。
+    # 本项目"宁可少答也不编造条款"，因此偏向提高应拒命中。
+    # 该值随语料与分块策略漂移，改动知识库后必须重新标定：
+    #   python -m backend.evaluation.eval_rag --sweep
+    default_refusal_threshold = 0.53
 
     def __init__(self, model_name: str) -> None:
         from sentence_transformers import SentenceTransformer

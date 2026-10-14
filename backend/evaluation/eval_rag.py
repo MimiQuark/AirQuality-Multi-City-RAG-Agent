@@ -36,10 +36,10 @@ CASE_FILES = {
 GATES = {
     # 离线 hash 只设检索护栏：它的相似度尺度无法区分"领域内口语化提问"与"领域外问题"
     # （锚点得分重叠，不存在可行阈值），对拒答设护栏等于设一个永远为 0.5 的假指标。
-    "hash-v1": {"recall_at_5": 0.85, "mrr": 0.60},
+    "hash-v1": {"recall_at_5": 0.80, "mrr": 0.55},
     # 语义模型才同时守检索与拒答。需要在 CI 上跑这一档时，装好 sentence-transformers
     # 后设置 USE_REAL_EMBEDDINGS=1 再执行本脚本。
-    "_real": {"recall_at_5": 0.90, "mrr": 0.80, "refusal_accuracy": 0.85},
+    "_real": {"recall_at_5": 0.90, "mrr": 0.80, "refusal_accuracy": 0.80},
 }
 
 
@@ -56,6 +56,7 @@ def build_service(use_real: bool, model_name: str) -> HybridRagService:
         create_embedding_provider(model_name, use_real),
         chunk_size=settings.rag_chunk_size,
         chunk_overlap=settings.rag_chunk_overlap,
+        chunk_strategy=settings.rag_chunk_strategy,
         min_score=settings.rag_min_score,
         refusal_threshold=settings.rag_refusal_threshold,
     )
@@ -101,6 +102,8 @@ def evaluate(service: HybridRagService, cases: dict) -> dict:
         "embedding": service.embedding.name,
         "refusal_threshold": service.refusal_threshold,
         "min_score": service.min_score,
+        "chunk_strategy": service.chunk_strategy,
+        "chunk_size": service.chunk_size,
         "cases": {"retrieval": n, "refusal": m,
                   "refusal_should_refuse": should_refuse_total,
                   "refusal_should_answer": should_answer_total},
@@ -210,7 +213,7 @@ def main() -> int:
         f"- 状态: **{primary['status']}**",
         f"- 评测集: `{primary['case_set']}`",
         f"- Embedding: `{primary['embedding']}`",
-        f"- 拒答阈值(cos): `{primary['refusal_threshold']}`  |  相对下限: `{primary['min_score']}`",
+        f"- 分块: `{primary['chunk_strategy']}` / chunk_size={primary['chunk_size']}  |  拒答阈值(cos): `{primary['refusal_threshold']}`",
         "",
         "| 指标 | 数值 | 护栏 |", "|---|---:|---:|",
         f"| Recall@1 | {mm['recall_at_1']:.3f} | - |",

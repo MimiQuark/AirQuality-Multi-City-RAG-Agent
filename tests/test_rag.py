@@ -33,6 +33,6 @@ def test_knowledge_sources_have_metadata() -> None:
     documents = load_documents()
     assert len(documents) == 11
     assert all(item.get("source_url") for item in documents)
-    assert all(item.get("version") == "2026-curated-1" for item in documents)
+    assert all(item.get("version") == "2026-curated-2" for item in documents)
 
 

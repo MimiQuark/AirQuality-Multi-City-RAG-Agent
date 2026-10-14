@@ -71,6 +71,106 @@ def chunk_document(document: dict[str, Any], size: int, overlap: int) -> list[Ch
     return chunks
 
 
+# 小节边界：中文序号标题（一、二、）、【】标注、第 X 条/章、markdown 标题
+_SECTION_RE = re.compile(
+    r"(?m)^(?=[一二三四五六七八九十]+、|【[^】]{1,20}】|第[一二三四五六七八九十百]+[条章节]|#{1,6}\s)"
+)
+_SENTENCE_RE = re.compile(r"(?<=[。；！？])")
+
+
+def split_sections(text: str) -> list[str]:
+    """按文档自身的章节标题切分；没有标题时退化为整篇。"""
+    sections = [part.strip() for part in _SECTION_RE.split(text) if part.strip()]
+    return sections or ([text.strip()] if text.strip() else [])
+
+
+def _split_long_section(section: str, size: int, overlap: int) -> list[str]:
+    """单个小节超过 size 时，按句子边界二次切分（保持语义完整）。"""
+    if len(section) <= size:
+        return [section]
+    sentences = [piece for piece in _SENTENCE_RE.split(section) if piece.strip()]
+    pieces: list[str] = []
+    buffer = ""
+    for sentence in sentences:
+        if buffer and len(buffer) + len(sentence) > size:
+            pieces.append(buffer)
+            buffer = buffer[-overlap:] if overlap else ""
+        buffer += sentence
+    if buffer.strip():
+        pieces.append(buffer)
+    # 兜底：极端情况下（单句超长）仍按长度硬切
+    final: list[str] = []
+    for piece in pieces:
+        if len(piece) <= size:
+            final.append(piece)
+        else:
+            step = max(1, size - overlap)
+            final.extend(piece[i:i + size] for i in range(0, len(piece), step) if piece[i:i + size].strip())
+    return final
+
+
+def chunk_document_structured(
+    document: dict[str, Any], size: int, overlap: int, *, with_title_context: bool = False
+) -> list[Chunk]:
+    """按文档结构分块。
+
+    与固定长度分块的区别：
+    1. 切分点落在章节标题处，不会把一个条款从中间切断；
+    2. 相邻小节会被合并到不超过 size，减少碎片；
+    3. 小节仍然超长时，退化到句子边界切分，而不是字符硬切。
+
+    with_title_context=True 时在每个块前加上文档标题，作为检索时的上下文提示
+    （生产 RAG 常见做法；单独作为一组对照，因为它同时改变了块的文本构成）。
+    """
+    raw = str(document.get("content", ""))
+    title = str(document.get("title", "未命名条款"))
+    source_id = str(document.get("id", ""))
+    source_url = str(document.get("source_url", ""))
+    category = str(document.get("category", "其他"))
+
+    units: list[str] = []
+    for section in split_sections(raw):
+        units.extend(_split_long_section(section, size, overlap))
+
+    merged: list[str] = []
+    buffer = ""
+    for unit in units:
+        if buffer and len(buffer) + len(unit) > size:
+            merged.append(buffer)
+            buffer = unit
+        else:
+            buffer = f"{buffer}\n{unit}" if buffer else unit
+    if buffer.strip():
+        merged.append(buffer)
+
+    chunks: list[Chunk] = []
+    for index, piece in enumerate(merged):
+        body = piece.strip()
+        if not body:
+            continue
+        digest = hashlib.sha1(f"{source_id}:sec:{index}:{body}".encode()).hexdigest()[:12]
+        chunks.append(
+            Chunk(
+                chunk_id=digest,
+                source_id=source_id or digest,
+                title=title,
+                text=f"{title}\n{body}" if with_title_context else body,
+                source_url=source_url,
+                category=category,
+            )
+        )
+    return chunks
+
+
+CHUNK_STRATEGIES = {
+    "fixed": lambda doc, size, overlap: chunk_document(doc, size, overlap),
+    "structure": lambda doc, size, overlap: chunk_document_structured(doc, size, overlap),
+    "structure_context": lambda doc, size, overlap: chunk_document_structured(
+        doc, size, overlap, with_title_context=True
+    ),
+}
+
+
 def _tokens(text: str) -> list[str]:
     normalized = re.sub(r"\s+", "", text.lower())
     return list(normalized) + [normalized[i : i + 2] for i in range(max(0, len(normalized) - 1))]
@@ -100,6 +200,7 @@ class HybridRagService:
         chunk_size: int = 400,
         chunk_overlap: int = 64,
         top_k: int = 5,
+        chunk_strategy: str = "fixed",
         vector_weight: float = 0.4,
         min_score: float = 0.0,
         refusal_threshold: float | None = None,
@@ -109,6 +210,9 @@ class HybridRagService:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.top_k = top_k
+        if chunk_strategy not in CHUNK_STRATEGIES:
+            raise ValueError(f"未知分块策略: {chunk_strategy}，可选 {sorted(CHUNK_STRATEGIES)}")
+        self.chunk_strategy = chunk_strategy
         self.vector_weight = vector_weight    # 仅用于 RRF 两路加权
         self.min_score = min_score            # 相对下限：保留 cos >= min_score * 最高分 的分块
         # 留空则采用 embedding 自带标定值（不同模型的相似度尺度不可比）
@@ -119,14 +223,16 @@ class HybridRagService:
         self.vectors = np.empty((0, embedding.dimension), dtype=np.float32)
 
     def index(self, documents: list[dict[str, Any]]) -> dict[str, int | str]:
+        chunker = CHUNK_STRATEGIES[self.chunk_strategy]
         self.chunks = [
             chunk
             for document in documents
-            for chunk in chunk_document(document, self.chunk_size, self.chunk_overlap)
+            for chunk in chunker(document, self.chunk_size, self.chunk_overlap)
         ]
         embeddings = self.embedding.embed_documents([chunk.text for chunk in self.chunks])
         self.vectors = np.asarray(embeddings, dtype=np.float32)
-        return {"documents": len(documents), "chunks": len(self.chunks), "embedding": self.embedding.name}
+        return {"documents": len(documents), "chunks": len(self.chunks),
+                "embedding": self.embedding.name, "chunk_strategy": self.chunk_strategy}
 
     def search(self, query: str, top_k: int | None = None) -> dict[str, Any]:
         """混合检索 + 基于置信度的拒答。

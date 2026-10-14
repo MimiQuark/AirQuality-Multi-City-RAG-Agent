@@ -1,0 +1,63 @@
+{
+  "repeat": 3,
+  "note": "工具为 CPU 密集型，线程池并发受 GIL 限制；收益率取决于同批重工具的个数",
+  "results": [
+    {
+      "scenario": "A 实时+预测（评测集多跳模式）",
+      "tools": [
+        "get_realtime",
+        "get_forecast"
+      ],
+      "n_tools": 2,
+      "serial_median_s": 0.353,
+      "parallel_median_s": 0.357,
+      "speedup": 0.99,
+      "saved_s": -0.004
+    },
+    {
+      "scenario": "B 政策+综合预警（规则版政策分支）",
+      "tools": [
+        "query_policy",
+        "get_comprehensive_alerts"
+      ],
+      "n_tools": 2,
+      "serial_median_s": 1.422,
+      "parallel_median_s": 1.426,
+      "speedup": 1.0,
+      "saved_s": -0.004
+    },
+    {
+      "scenario": "C 预测+综合预警+模型训练（三个重工具）",
+      "tools": [
+        "get_forecast",
+        "get_comprehensive_alerts",
+        "train_models"
+      ],
+      "n_tools": 3,
+      "serial_median_s": 3.038,
+      "parallel_median_s": 2.529,
+      "speedup": 1.2,
+      "saved_s": 0.509
+    },
+    {
+      "scenario": "D 全部 10 个工具",
+      "tools": [
+        "get_overview",
+        "get_forecast",
+        "get_correlation",
+        "get_alerts",
+        "get_comprehensive_alerts",
+        "get_season_analysis",
+        "get_cities_comparison",
+        "train_models",
+        "get_realtime",
+        "query_policy"
+      ],
+      "n_tools": 10,
+      "serial_median_s": 3.034,
+      "parallel_median_s": 2.561,
+      "speedup": 1.18,
+      "saved_s": 0.472
+    }
+  ]
+}

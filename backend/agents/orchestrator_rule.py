@@ -4,7 +4,7 @@ Rule-based Orchestrator - 无需 LLM API 的 Agent 意图识别
 """
 import re
 from typing import Dict, List, Any
-from backend.tools.implementations import execute_tool
+from backend.tools.implementations import execute_tool_calls_sync
 
 # 城市名映射
 CITY_MAP = {
@@ -239,15 +239,9 @@ def run_agent_rule_based(question: str, city: str = "beijing", **kwargs) -> Dict
     # 1. 意图识别 + Tool 选择
     tool_calls = rule_based_plan(question, city)
     
-    # 2. 并行执行
-    tool_results = []
-    for call in tool_calls:
-        result = execute_tool(call["tool"], call.get("params", {}))
-        tool_results.append({
-            "tool": call["tool"],
-            "params": call.get("params", {}),
-            "result": result,
-        })
+    # 2. 并发执行（与 LLM 版共用同一套参数补齐 + 并发实现）
+    #    注：注释原先就写着"并行"，但实现是顺序 for 循环，此处补齐为真并发。
+    tool_results = execute_tool_calls_sync(tool_calls, city)
     
     # 3. 结果综合
     answer = rule_based_synthesize(question, tool_results)

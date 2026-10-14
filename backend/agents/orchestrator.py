@@ -2,8 +2,9 @@
 Orchestrator Agent - LangGraph 多 Agent 编排器
 核心流程: 用户输入 → 意图识别 + Tool 选择 → 并行执行 Tool → LLM 综合回答
 """
-import os
+import asyncio
 import json
+import os
 from typing import Dict, List, Any, TypedDict, Annotated
 from datetime import datetime
 
@@ -13,7 +14,11 @@ from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 
 # 导入 Tool
-from backend.tools.implementations import get_tool_descriptions, execute_tool
+from backend.tools.implementations import (
+    execute_tool_calls,
+    get_tool_descriptions,
+    run_coroutine,
+)
 
 # ============================================================
 # 1. 模型配置（支持 OpenAI / DeepSeek / Qwen / Ollama）
@@ -175,37 +180,17 @@ def orchestrator_node(state: AgentState) -> AgentState:
     return state
 
 
-def tool_executor_node(state: AgentState) -> AgentState:
-    """
-    并行执行所有 Tool
+async def tool_executor_node(state: AgentState) -> AgentState:
+    """并发执行本轮规划出的全部 Tool。
+
+    工具本身是同步的（pandas / sklearn），统一交给
+    backend.tools.implementations.execute_tool_calls 用线程池并发执行，
+    结果顺序与 tool_calls 保持一致。
+    参数补齐（city 默认值）也在该模块内统一处理，LLM 版与规则版共用同一套逻辑。
     """
     tool_calls = state.get("tool_calls", [])
-    results = []
-    
-    for call in tool_calls:
-        tool_name = call.get("tool")
-        params = call.get("params", {})
-
-        # 默认填充城市参数——仅限声明了 city 参数的工具
-        # （query_policy 等不接受 city，盲目填充会导致"不支持 city 参数"执行失败）
-        if "city" not in params and state.get("city"):
-            try:
-                schema = next((t for t in get_tool_descriptions() if t["name"] == tool_name), None)
-                if schema and "city" in (schema.get("parameters", {}).get("properties", {}) or {}):
-                    params["city"] = state["city"]
-            except Exception:
-                pass  # schema 获取失败时不填充，不影响主流程
-
-        result = execute_tool(tool_name, params)
-        results.append({
-            "tool": tool_name,
-            "params": params,
-            "result": result,
-        })
-    
-    state["tool_results"] = results
+    state["tool_results"] = await execute_tool_calls(tool_calls, state.get("city"))
     return state
-
 
 def synthesizer_node(state: AgentState) -> AgentState:
     """
@@ -320,23 +305,14 @@ def get_agent():
 # 6. 对外接口
 # ============================================================
 
-def run_agent(question: str, city: str = "beijing", history: List[Dict] = None) -> Dict[str, Any]:
-    """
-    运行 Agent 处理用户问题
-    
-    Args:
-        question: 用户问题
-        city: 默认城市
-        history: 历史对话记录 [{"role": "user"/"assistant", "content": "..."}]
-    
-    Returns:
-        {"answer": str, "tool_calls": list, "tool_results": list}
-    """
+async def run_agent_async(question: str, city: str = "beijing",
+                        history: List[Dict] = None) -> Dict[str, Any]:
+    """异步入口：Agent 图含 async 节点，需用 ainvoke 驱动。"""
     agent = get_agent()
-    
-    messages = history or []
+
+    messages = list(history or [])
     messages.append({"role": "user", "content": question})
-    
+
     state = {
         "messages": messages,
         "city": city,
@@ -346,43 +322,54 @@ def run_agent(question: str, city: str = "beijing", history: List[Dict] = None) 
         "usage": {"prompt_tokens": 0, "completion_tokens": 0},
     }
 
-    # 引用溯源：从工具结果中确定性地提取 references（不依赖 LLM 自觉遵守格式）
-    def _build_references(tool_results: List[Dict]):
-        references, refused = [], False
-        for r in tool_results:
-            if r.get("tool") == "query_policy":
-                res = r.get("result") or {}
-                if res.get("refused"):
-                    refused = True
-                else:
-                    for d in res.get("results", []):
-                        references.append({
-                            "type": "standard",
-                            "id": d.get("id", ""),
-                            "title": d.get("title", ""),
-                        })
-            else:
-                references.append({"type": "data", "source": r.get("tool", "")})
-        return references, refused
+    result = await agent.ainvoke(state)
+    tool_results = result.get("tool_results", [])
+    references, refused = build_references(tool_results)
+    usage = result.get("usage") or {}
+    return {
+        "answer": result.get("final_answer", ""),
+        "tool_calls": result.get("tool_calls", []),
+        "tool_results": tool_results,
+        "city": result.get("city", city),
+        "references": references,
+        "refused": refused,
+        # token 用量透传：取不到时保持 0，由接口层写成 NULL
+        "usage": {
+            "prompt_tokens": usage.get("prompt_tokens") or None,
+            "completion_tokens": usage.get("completion_tokens") or None,
+        },
+    }
 
+
+def build_references(tool_results: List[Dict]) -> tuple[List[Dict[str, Any]], bool]:
+    """从工具结果中确定性地提取引用（不依赖 LLM 自觉遵守格式）。"""
+    references: List[Dict[str, Any]] = []
+    refused = False
+    for item in tool_results:
+        if item.get("tool") == "query_policy":
+            result = item.get("result") or {}
+            if result.get("refused"):
+                refused = True
+            else:
+                for doc in result.get("results", []):
+                    references.append({
+                        "type": "standard",
+                        "id": doc.get("id", ""),
+                        "title": doc.get("title", ""),
+                    })
+        else:
+            references.append({"type": "data", "source": item.get("tool", "")})
+    return references, refused
+
+
+def run_agent(question: str, city: str = "beijing", history: List[Dict] = None) -> Dict[str, Any]:
+    """同步入口，供 FastAPI 同步端点与脚本调用。
+
+    Agent 图包含 async 节点，这里通过 run_coroutine 适配；若调用方本身
+    处在事件循环中，会在独立线程里执行，避免嵌套事件循环报错。
+    """
     try:
-        result = agent.invoke(state)
-        tool_results = result.get("tool_results", [])
-        references, refused = _build_references(tool_results)
-        usage = result.get("usage") or {}
-        return {
-            "answer": result.get("final_answer", ""),
-            "tool_calls": result.get("tool_calls", []),
-            "tool_results": tool_results,
-            "city": result.get("city", city),
-            "references": references,
-            "refused": refused,
-            # token 用量透传：取不到时保持 0，由接口层写成 NULL
-            "usage": {
-                "prompt_tokens": usage.get("prompt_tokens") or None,
-                "completion_tokens": usage.get("completion_tokens") or None,
-            },
-        }
+        return run_coroutine(run_agent_async(question, city, history))
     except Exception as e:
         return {
             "answer": f"Agent 执行出错: {str(e)}",

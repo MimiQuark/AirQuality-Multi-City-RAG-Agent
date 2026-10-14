@@ -2,9 +2,11 @@
 Tool 定义与实现
 将现有 engine.py 的能力封装为 Function Calling Tool
 """
+import asyncio
 import os
 import sys
-from typing import Dict, List, Any, Optional, Type
+from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 # 确保能导入原 engine 模块
@@ -325,3 +327,76 @@ def execute_tool(name: str, params: Dict[str, Any]) -> Dict[str, Any]:
         return func(**params)
     except Exception as e:
         return {"error": f"工具执行失败: {str(e)}"}
+
+
+# ============================================================
+# 3. 批量执行：LLM 版与规则版共用同一套参数补齐 + 并发逻辑
+#    （避免两套编排各自维护一份 city 填充规则而逐渐分叉）
+# ============================================================
+
+def _resolve_params(call: Dict[str, Any], city: Optional[str]) -> Dict[str, Any]:
+    """补齐 city 参数——仅限 schema 中声明了 city 的工具。
+
+    query_policy 等工具不接受 city，盲目填充会导致"不支持 city 参数"执行失败。
+    """
+    params = dict(call.get("params", {}) or {})
+    tool_name = call.get("tool")
+    if "city" in params or not city:
+        return params
+    try:
+        schema = next((t for t in get_tool_descriptions() if t["name"] == tool_name), None)
+        properties = (schema or {}).get("parameters", {}).get("properties", {}) or {}
+        if "city" in properties:
+            params["city"] = city
+    except Exception:
+        pass  # schema 获取失败时不填充，不影响主流程
+    return params
+
+
+def execute_tool_call(call: Dict[str, Any], city: Optional[str] = None) -> Dict[str, Any]:
+    """执行单个工具调用，统一返回 {tool, params, result}。
+
+    单个工具抛异常时捕获为 result.error，避免一个工具失败拖垮整批调用。
+    """
+    tool_name = call.get("tool")
+    try:
+        params = _resolve_params(call, city)
+        return {"tool": tool_name, "params": params, "result": execute_tool(tool_name, params)}
+    except Exception as exc:
+        return {"tool": tool_name, "params": call.get("params", {}) or {},
+                "result": {"error": str(exc)}}
+
+
+async def execute_tool_calls(calls: List[Dict[str, Any]], city: Optional[str] = None) -> List[Dict[str, Any]]:
+    """并发执行多个工具调用，返回顺序与入参一致。
+
+    工具本身是同步的（pandas / sklearn），因此用 asyncio.to_thread 放进线程池。
+    需要注意这些工具偏 CPU 密集型，受 GIL 限制实测加速有限（见
+    backend/evaluation/bench_tool_parallel.py 的实测数据）；接口类（IO）工具
+    的收益会明显更高。此处不做进程池：工具依赖模块级 DataFrame 缓存，
+    多进程会各自重新加载数据与模型，反而更慢。
+    """
+    if not calls:
+        return []
+    return list(await asyncio.gather(*(asyncio.to_thread(execute_tool_call, call, city) for call in calls)))
+
+
+def execute_tool_calls_sync(calls: List[Dict[str, Any]], city: Optional[str] = None) -> List[Dict[str, Any]]:
+    """同步入口，供非 async 上下文（规则版 Agent、测试）调用。"""
+    if not calls:
+        return []
+    return run_coroutine(execute_tool_calls(calls, city))
+
+
+def run_coroutine(coro: Any) -> Any:
+    """在同步代码里跑协程。
+
+    当前线程没有事件循环时直接 asyncio.run；若已有运行中的循环（例如在
+    async 端点内调用同步入口），则另起线程执行，避免 "event loop is already running"。
+    """
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(coro)
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        return pool.submit(asyncio.run, coro).result()

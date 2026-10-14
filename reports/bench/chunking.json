@@ -1,0 +1,364 @@
+{
+  "results": [
+    {
+      "provider": "hash-v1",
+      "chunk_size": 200,
+      "strategy": "fixed",
+      "case_set": "v1",
+      "chunks": 29,
+      "recall_at_1": 0.8818181818181818,
+      "recall_at_5": 0.990909090909091,
+      "mrr": 0.9325757575757575
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 200,
+      "strategy": "fixed",
+      "case_set": "v2",
+      "chunks": 29,
+      "recall_at_1": 0.5151515151515151,
+      "recall_at_5": 0.8333333333333334,
+      "mrr": 0.6292929292929292
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 200,
+      "strategy": "structure",
+      "case_set": "v1",
+      "chunks": 28,
+      "recall_at_1": 0.8909090909090909,
+      "recall_at_5": 1.0,
+      "mrr": 0.9401515151515152
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 200,
+      "strategy": "structure",
+      "case_set": "v2",
+      "chunks": 28,
+      "recall_at_1": 0.5454545454545454,
+      "recall_at_5": 0.8939393939393939,
+      "mrr": 0.6681818181818182
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 200,
+      "strategy": "structure_context",
+      "case_set": "v1",
+      "chunks": 28,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 200,
+      "strategy": "structure_context",
+      "case_set": "v2",
+      "chunks": 28,
+      "recall_at_1": 0.5454545454545454,
+      "recall_at_5": 0.8939393939393939,
+      "mrr": 0.6755050505050505
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 300,
+      "strategy": "fixed",
+      "case_set": "v1",
+      "chunks": 22,
+      "recall_at_1": 0.8818181818181818,
+      "recall_at_5": 1.0,
+      "mrr": 0.9393939393939393
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 300,
+      "strategy": "fixed",
+      "case_set": "v2",
+      "chunks": 22,
+      "recall_at_1": 0.4696969696969697,
+      "recall_at_5": 0.8181818181818182,
+      "mrr": 0.6055555555555556
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 300,
+      "strategy": "structure",
+      "case_set": "v1",
+      "chunks": 23,
+      "recall_at_1": 0.8909090909090909,
+      "recall_at_5": 1.0,
+      "mrr": 0.9454545454545454
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 300,
+      "strategy": "structure",
+      "case_set": "v2",
+      "chunks": 23,
+      "recall_at_1": 0.5151515151515151,
+      "recall_at_5": 0.8484848484848485,
+      "mrr": 0.6345959595959596
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 300,
+      "strategy": "structure_context",
+      "case_set": "v1",
+      "chunks": 23,
+      "recall_at_1": 0.9636363636363636,
+      "recall_at_5": 1.0,
+      "mrr": 0.9818181818181818
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 300,
+      "strategy": "structure_context",
+      "case_set": "v2",
+      "chunks": 23,
+      "recall_at_1": 0.5,
+      "recall_at_5": 0.8484848484848485,
+      "mrr": 0.6343434343434343
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 400,
+      "strategy": "fixed",
+      "case_set": "v1",
+      "chunks": 14,
+      "recall_at_1": 0.9,
+      "recall_at_5": 1.0,
+      "mrr": 0.9446969696969697
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 400,
+      "strategy": "fixed",
+      "case_set": "v2",
+      "chunks": 14,
+      "recall_at_1": 0.48484848484848486,
+      "recall_at_5": 0.8484848484848485,
+      "mrr": 0.6265151515151516
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 400,
+      "strategy": "structure",
+      "case_set": "v1",
+      "chunks": 14,
+      "recall_at_1": 0.8909090909090909,
+      "recall_at_5": 1.0,
+      "mrr": 0.9401515151515152
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 400,
+      "strategy": "structure",
+      "case_set": "v2",
+      "chunks": 14,
+      "recall_at_1": 0.5,
+      "recall_at_5": 0.8484848484848485,
+      "mrr": 0.6328282828282829
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 400,
+      "strategy": "structure_context",
+      "case_set": "v1",
+      "chunks": 14,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "hash-v1",
+      "chunk_size": 400,
+      "strategy": "structure_context",
+      "case_set": "v2",
+      "chunks": 14,
+      "recall_at_1": 0.5303030303030303,
+      "recall_at_5": 0.8484848484848485,
+      "mrr": 0.6530303030303031
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 200,
+      "strategy": "fixed",
+      "case_set": "v1",
+      "chunks": 29,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 200,
+      "strategy": "fixed",
+      "case_set": "v2",
+      "chunks": 29,
+      "recall_at_1": 0.8181818181818182,
+      "recall_at_5": 0.9696969696969697,
+      "mrr": 0.8876262626262627
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 200,
+      "strategy": "structure",
+      "case_set": "v1",
+      "chunks": 28,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 200,
+      "strategy": "structure",
+      "case_set": "v2",
+      "chunks": 28,
+      "recall_at_1": 0.8333333333333334,
+      "recall_at_5": 0.9848484848484849,
+      "mrr": 0.8939393939393939
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 200,
+      "strategy": "structure_context",
+      "case_set": "v1",
+      "chunks": 28,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 200,
+      "strategy": "structure_context",
+      "case_set": "v2",
+      "chunks": 28,
+      "recall_at_1": 0.803030303030303,
+      "recall_at_5": 0.9545454545454546,
+      "mrr": 0.8598484848484849
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 300,
+      "strategy": "fixed",
+      "case_set": "v1",
+      "chunks": 22,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 300,
+      "strategy": "fixed",
+      "case_set": "v2",
+      "chunks": 22,
+      "recall_at_1": 0.7424242424242424,
+      "recall_at_5": 0.9848484848484849,
+      "mrr": 0.8376262626262626
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 300,
+      "strategy": "structure",
+      "case_set": "v1",
+      "chunks": 23,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 300,
+      "strategy": "structure",
+      "case_set": "v2",
+      "chunks": 23,
+      "recall_at_1": 0.7878787878787878,
+      "recall_at_5": 0.9696969696969697,
+      "mrr": 0.852020202020202
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 300,
+      "strategy": "structure_context",
+      "case_set": "v1",
+      "chunks": 23,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 300,
+      "strategy": "structure_context",
+      "case_set": "v2",
+      "chunks": 23,
+      "recall_at_1": 0.7727272727272727,
+      "recall_at_5": 0.9545454545454546,
+      "mrr": 0.8381313131313132
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 400,
+      "strategy": "fixed",
+      "case_set": "v1",
+      "chunks": 14,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 400,
+      "strategy": "fixed",
+      "case_set": "v2",
+      "chunks": 14,
+      "recall_at_1": 0.7727272727272727,
+      "recall_at_5": 0.9848484848484849,
+      "mrr": 0.8598484848484849
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 400,
+      "strategy": "structure",
+      "case_set": "v1",
+      "chunks": 14,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 400,
+      "strategy": "structure",
+      "case_set": "v2",
+      "chunks": 14,
+      "recall_at_1": 0.7727272727272727,
+      "recall_at_5": 0.9848484848484849,
+      "mrr": 0.8623737373737373
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 400,
+      "strategy": "structure_context",
+      "case_set": "v1",
+      "chunks": 14,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    {
+      "provider": "BGE",
+      "chunk_size": 400,
+      "strategy": "structure_context",
+      "case_set": "v2",
+      "chunks": 14,
+      "recall_at_1": 0.7727272727272727,
+      "recall_at_5": 0.9696969696969697,
+      "mrr": 0.8494949494949495
+    }
+  ]
+}

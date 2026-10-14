@@ -17,6 +17,7 @@ def _get_service() -> HybridRagService:
             create_embedding_provider(settings.embedding_model, settings.use_real_embeddings),
             chunk_size=settings.rag_chunk_size,
             chunk_overlap=settings.rag_chunk_overlap,
+            chunk_strategy=settings.rag_chunk_strategy,
             min_score=MIN_SCORE,
             refusal_threshold=settings.rag_refusal_threshold,
         )
