@@ -99,7 +99,9 @@ def get_rag_service() -> HybridRagService:
             chunk_size=app_settings.rag_chunk_size,
             chunk_overlap=app_settings.rag_chunk_overlap,
             top_k=app_settings.rag_top_k,
+            chunk_strategy=app_settings.rag_chunk_strategy,
             min_score=app_settings.rag_min_score,
+            refusal_threshold=app_settings.rag_refusal_threshold,
         )
         _rag_service.index(load_documents())
     return _rag_service

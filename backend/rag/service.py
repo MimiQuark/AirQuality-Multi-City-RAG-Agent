@@ -238,9 +238,9 @@ class HybridRagService:
         """混合检索 + 基于置信度的拒答。
 
         打分：score = w_v·(cos+1)/2 + w_k·min(1,kw·3) + w_t·title + w_r·rrf_norm
-        RRF 只用于把"向量排名"和"关键词排名"融合到同一尺度（并归一化到 0-1），
-        绝对置信度取全库最高分——它同时反映"有没有相关内容"和"匹配得多好"。
-        拒答不再依赖硬编码领域词表，而是 confidence < refusal_threshold。
+        score 只用于**排序**；RRF 仅把两路排名融合到同一尺度（并归一化到 0-1）。
+        拒答用的 confidence 是**原始余弦**的全库最大值（见下方说明），
+        不再依赖硬编码领域词表，判据为 confidence < refusal_threshold。
         """
         if not self.chunks:
             self.index(load_documents())
@@ -297,8 +297,8 @@ class HybridRagService:
         # 阈值失去可解释性（也难标定）。原始余弦的语义明确：越低越不相关。
         confidence = float(vector_scores.max()) if vector_scores.size else 0.0
 
-        # 相对下限：只保留与最佳匹配差距不超过 (1-min_score) 的分块，
-        # 削掉长尾弱相关项。该判据与 embedding 尺度无关，换模型不用重标定。
+        # 相对下限（默认 0 = 关闭）：保留 cos >= min_score × 最高 cos 的分块，
+        # 削掉长尾弱相关项。用比值而非绝对值，换 embedding 不必重标定。
         keep_floor = confidence * self.min_score if self.min_score > 0 else -1.0
 
         results: list[SearchResult] = []

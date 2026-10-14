@@ -214,8 +214,9 @@ def tool_query_policy(query: str) -> Dict[str, Any]:
             return {
                 "refused": True,
                 "reason": (
-                    f"未检索到相关标准条款（最佳相关度 {detail['best_score']:.2f} "
-                    f"低于阈值 {retriever.MIN_SCORE}），为避免编造条款，本工具拒绝凭空回答。"
+                    f"未检索到相关标准条款（最高相似度 {detail['confidence']:.2f} "
+                    f"低于拒答阈值 {detail['refusal_threshold']:.2f}），"
+                    f"为避免编造条款，本工具拒绝凭空回答。"
                 ),
                 "results": [],
             }

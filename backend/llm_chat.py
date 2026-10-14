@@ -48,9 +48,21 @@ def get_last_error() -> str:
     return LAST_ERROR or ""
 
 
+# /api/chat 每次提问都会走到这里。原实现每次重新读 5.2 万行 CSV 并做特征工程，
+# 按 engine 实例缓存一次即可（与 main.get_df / tools.implementations._get_df 同一思路）。
+_DF_CACHE: dict[int, object] = {}
+
+
+def _get_df(engine):
+    key = id(engine)
+    if key not in _DF_CACHE:
+        _DF_CACHE[key] = engine.preprocess(engine.load_data())
+    return _DF_CACHE[key]
+
+
 def build_data_context(engine, city="beijing") -> str:
     """从引擎生成实时数据快照, 作为 LLM 对话上下文"""
-    df = engine.preprocess(engine.load_data())
+    df = _get_df(engine)
     cdf = engine.get_city_df(df, city)
     cname = engine.CITIES.get(city, city)
 

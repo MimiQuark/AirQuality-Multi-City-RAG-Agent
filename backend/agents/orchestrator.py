@@ -2,10 +2,12 @@
 Orchestrator Agent - LangGraph 多 Agent 编排器
 核心流程: 用户输入 → 意图识别 + Tool 选择 → 并行执行 Tool → LLM 综合回答
 """
-import asyncio
 import json
+import logging
 import os
-from typing import Dict, List, Any, TypedDict, Annotated
+from typing import Any, Dict, List, TypedDict
+
+logger = logging.getLogger("agent")
 from datetime import datetime
 
 # LangGraph 相关
@@ -57,6 +59,7 @@ class AgentState(TypedDict):
     tool_results: List[Dict]     # Tool 执行结果
     final_answer: str            # 最终回答
     usage: Dict[str, int]        # 累计 token 用量（prompt/completion，取不到则为 0）
+    plan_error: str              # 规划节点解析失败原因（空串表示正常）
 
 
 # ============================================================
@@ -172,10 +175,13 @@ def orchestrator_node(state: AgentState) -> AgentState:
         if not isinstance(tool_calls, list):
             tool_calls = []
     except Exception as e:
-        # LLM 输出格式异常，降级为直接回答
+        # LLM 输出格式异常：降级为"不调工具直接作答"。
+        # 这里**不能**把错误写进 state["messages"]——那会把内部异常当成助手发言
+        # 混进对话历史（多轮时被下一轮看到），也会泄漏接口错误细节。
         tool_calls = []
-        state["messages"].append({"role": "assistant", "content": f"我在分析问题，请稍候...（解析错误: {e}）"})
-    
+        state["plan_error"] = f"{type(e).__name__}: {e}"
+        logger.warning("规划节点解析失败，降级为无工具作答: %s", state["plan_error"])
+
     state["tool_calls"] = tool_calls
     return state
 
@@ -263,7 +269,7 @@ def should_continue(state: AgentState) -> str:
 # 5. 构建 LangGraph
 # ============================================================
 
-def build_agent() -> StateGraph:
+def build_agent() -> Any:
     """构建并编译 Agent 工作流"""
     workflow = StateGraph(AgentState)
     
@@ -320,6 +326,7 @@ async def run_agent_async(question: str, city: str = "beijing",
         "tool_results": [],
         "final_answer": "",
         "usage": {"prompt_tokens": 0, "completion_tokens": 0},
+        "plan_error": "",
     }
 
     result = await agent.ainvoke(state)
@@ -333,6 +340,7 @@ async def run_agent_async(question: str, city: str = "beijing",
         "city": result.get("city", city),
         "references": references,
         "refused": refused,
+        "plan_error": result.get("plan_error", ""),
         # token 用量透传：取不到时保持 0，由接口层写成 NULL
         "usage": {
             "prompt_tokens": usage.get("prompt_tokens") or None,
