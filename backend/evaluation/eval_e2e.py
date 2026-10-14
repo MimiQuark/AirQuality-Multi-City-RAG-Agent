@@ -39,6 +39,10 @@ from backend.rag.service import load_documents  # noqa: E402
 # 回答文本里的条款引用：【依据：标题(条款id)】，以及国标编号
 CITATION_RE = re.compile(r"【依据：[^】]*?[\(（]([A-Za-z0-9\-]+)[\)）]】")
 STANDARD_RE = re.compile(r"\b((?:GB|HJ|GB/T|HJ/T)\s*\d{3,5}\s*[-—]\s*\d{4})\b")
+# 条款编号引用（如"第 4.1 条""第三十七条"）。本项目知识库按"一、二、三、"分节，
+# 不含任何"第 X 条"编号，因此回答里出现条款编号即为编造——
+# 这正是 Prompt 里"严禁编造任何条款编号"所针对的行为，必须能被指标抓到。
+CLAUSE_RE = re.compile(r"第\s*[\d一二三四五六七八九十百]+(?:\.[\d]+)*\s*[条章节]")
 
 
 @dataclass
@@ -98,19 +102,23 @@ CASES: list[Case] = [
 ]
 
 
-def kb_vocab() -> tuple[set[str], set[str]]:
-    """知识库里真实存在的条款 id 与标准编号。"""
-    ids, standards = set(), set()
+def kb_vocab() -> tuple[set[str], set[str], set[str]]:
+    """知识库里真实存在的条款 id、标准编号与条款编号。"""
+    ids, standards, clauses = set(), set(), set()
     for doc in load_documents():
         ids.add(str(doc.get("id", "")))
-        standards.update(m.group(1).replace(" ", "") for m in STANDARD_RE.finditer(str(doc.get("title", ""))))
-    return ids, standards
+        title = str(doc.get("title", ""))
+        text = title + str(doc.get("content", ""))
+        standards.update(m.group(1).replace(" ", "") for m in STANDARD_RE.finditer(title))
+        clauses.update(m.group(0).replace(" ", "") for m in CLAUSE_RE.finditer(text))
+    return ids, standards, clauses
 
 
-def extract_answer_citations(text: str) -> tuple[list[str], list[str]]:
+def extract_answer_citations(text: str) -> tuple[list[str], list[str], list[str]]:
     ids = CITATION_RE.findall(text or "")
     standards = [m.group(1).replace(" ", "") for m in STANDARD_RE.finditer(text or "")]
-    return ids, standards
+    clauses = [m.group(0).replace(" ", "") for m in CLAUSE_RE.finditer(text or "")]
+    return ids, standards, clauses
 
 
 def build_answerer(kind: str):
@@ -123,10 +131,11 @@ def build_answerer(kind: str):
     raise ValueError(kind)
 
 
-def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[str]) -> dict:
+def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[str],
+                  kb_clauses: set[str]) -> dict:
     actual_tools = [c.get("tool") for c in result.get("tool_calls", [])]
     answer = result.get("answer", "") or ""
-    cited_ids, cited_standards = extract_answer_citations(answer)
+    cited_ids, cited_standards, cited_clauses = extract_answer_citations(answer)
 
     if case.category == "ood":
         # 超纲用例不评判工具选择：先调检索确认库里没有、再拒答，才是正确行为
@@ -140,10 +149,20 @@ def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[
     valid_ids = [i for i in cited_ids if i in kb_ids]
     fake_ids = [i for i in cited_ids if i not in kb_ids]
     fake_standards = [s for s in cited_standards if s not in kb_standards]
+    fake_clauses = [c for c in cited_clauses if c not in kb_clauses]
     if case.category == "policy" and case.expected_citation_ids:
         citation_ok = bool(set(valid_ids) & set(case.expected_citation_ids))
     else:
         citation_ok = not fake_ids and not fake_standards
+
+    # API 层结构化引用（orchestrator.build_references 从工具结果确定性提取）
+    structured_ids = [ref.get("id", "") for ref in (result.get("references") or [])
+                      if ref.get("type") == "standard"]
+    structured_fake = [i for i in structured_ids if i not in kb_ids]
+    if case.category == "policy" and case.expected_citation_ids:
+        structured_ok = bool(set(structured_ids) & set(case.expected_citation_ids))
+    else:
+        structured_ok = not structured_fake
 
     refused = bool(result.get("refused"))
     refusal_ok = (refused == case.should_refuse)
@@ -156,15 +175,22 @@ def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[
         "answer_excerpt": answer[:160],
         "routing_ok": routing_ok, "facts_ok": facts_ok, "citation_ok": citation_ok,
         "refusal_ok": refusal_ok, "consistency_ok": consistency_ok,
-        "cited_ids": cited_ids, "hallucinated_ids": fake_ids, "hallucinated_standards": fake_standards,
+        "cited_ids": cited_ids, "hallucinated_ids": fake_ids,
+        "cited_standards": cited_standards, "cited_clauses": cited_clauses,
+        "hallucinated_standards": fake_standards, "hallucinated_clauses": fake_clauses,
+        "structured_ids": structured_ids, "structured_ok": structured_ok,
+        "structured_hallucinated": structured_fake,
         "note": case.note,
     }
 
 
 def summarize(rows: list[dict]) -> dict:
     n = len(rows)
-    halluc = sum(len(r["hallucinated_ids"]) + len(r["hallucinated_standards"]) for r in rows)
-    total_cited = sum(len(r["cited_ids"]) for r in rows)
+    halluc = sum(len(r["hallucinated_ids"]) + len(r["hallucinated_standards"])
+                 + len(r["hallucinated_clauses"]) for r in rows)
+    # 分母与分子同口径：文本里出现的 id / 标准号 / 条款编号三类引用都计入
+    total_cited = sum(len(r["cited_ids"]) + len(r["cited_standards"]) + len(r["cited_clauses"])
+                      for r in rows)
     return {
         "cases": n,
         "tool_routing_accuracy": sum(r["routing_ok"] for r in rows) / n,
@@ -173,13 +199,17 @@ def summarize(rows: list[dict]) -> dict:
         "refusal_compliance": sum(r["refusal_ok"] for r in rows) / n,
         "refusal_citation_consistency": sum(r["consistency_ok"] for r in rows) / n,
         "hallucinated_citations": halluc,
+        "hallucinated_clauses": sum(len(r["hallucinated_clauses"]) for r in rows),
+        # 结构化引用由 build_references 从工具结果确定性提取，与模型是否遵守格式无关
+        "structured_citation_correctness": sum(r["structured_ok"] for r in rows) / n,
+        "structured_hallucinated_citations": sum(len(r["structured_hallucinated"]) for r in rows),
         "cited_citations": total_cited,
     }
 
 
 def run(answerer_kind: str) -> dict:
     label, fn = build_answerer(answerer_kind)
-    kb_ids, kb_standards = kb_vocab()
+    kb_ids, kb_standards, kb_clauses = kb_vocab()
     rows = []
     for case in CASES:
         try:
@@ -187,7 +217,7 @@ def run(answerer_kind: str) -> dict:
         except Exception as exc:  # 单个用例失败不中断整轮评测
             result = {"answer": f"[评测捕获异常] {type(exc).__name__}: {exc}",
                       "tool_calls": [], "tool_results": [], "refused": False}
-        rows.append(evaluate_case(case, result, kb_ids, kb_standards))
+        rows.append(evaluate_case(case, result, kb_ids, kb_standards, kb_clauses))
     return {"answerer": label, "metrics": summarize(rows), "results": rows}
 
 
@@ -211,7 +241,10 @@ def main() -> int:
         print(f"  引用正确率            {m['citation_correctness']:.3f}")
         print(f"  拒答合规率            {m['refusal_compliance']:.3f}")
         print(f"  拒答—引用一致性       {m['refusal_citation_consistency']:.3f}")
-        print(f"  幻觉引用数 / 总引用数  {m['hallucinated_citations']} / {m['cited_citations']}")
+        print(f"  幻觉引用数 / 总引用数  {m['hallucinated_citations']} / {m['cited_citations']}"
+              f"   (其中编造条款编号 {m['hallucinated_clauses']} 处)")
+        print(f"  └ API层结构化引用正确率 {m['structured_citation_correctness']:.3f}"
+              f"   结构化幻觉引用 {m['structured_hallucinated_citations']} 处")
         failed = [r["id"] for r in report["results"]
                   if not (r["routing_ok"] and r["facts_ok"] and r["citation_ok"] and r["refusal_ok"])]
         print(f"  未完全通过的用例: {', '.join(failed) if failed else '无'}")
@@ -238,6 +271,9 @@ def main() -> int:
             f"| 拒答合规率 | {m['refusal_compliance']:.3f} |",
             f"| 拒答—引用一致性 | {m['refusal_citation_consistency']:.3f} |",
             f"| 幻觉引用数 / 总引用数 | {m['hallucinated_citations']} / {m['cited_citations']} |",
+            f"| └ 其中编造条款编号 | {m['hallucinated_clauses']} |",
+            f"| API 层结构化引用正确率 | {m['structured_citation_correctness']:.3f} |",
+            f"| API 层结构化幻觉引用 | {m['structured_hallucinated_citations']} |",
             "",
         ]
     (output.parent / "summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
