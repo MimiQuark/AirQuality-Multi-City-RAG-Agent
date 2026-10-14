@@ -1,4 +1,5 @@
 $ E:\Anaconda\python.exe -m backend.evaluation.eval_rag
 
-{"recall_at_1": 1.0, "recall_at_5": 1.0, "mrr": 1.0, "refusal_accuracy": 1.0}
+[v2] hash-v1                    R@1=0.561 R@5=0.894 MRR=0.679 拒答准确率=0.542 (应拒=0.125/应答=0.958) -> passed
+{"recall_at_1": 0.5606060606060606, "recall_at_5": 0.8939393939393939, "mrr": 0.6787878787878787, "refusal_accuracy": 0.5416666666666666, "refusal_accuracy_on_refuse_samples": 0.125, "answer_accuracy_on_answer_samples": 0.9583333333333334}
 

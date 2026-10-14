@@ -1,0 +1,692 @@
+{
+  "version": "v2",
+  "description": "困难集：口语化/无标题关键词的检索题 + 平衡拒答集(24正/24负)",
+  "retrieval": [
+    {
+      "id": "hard-000",
+      "query": "空气质量指数超过三百是什么概念",
+      "expected_source_id": "hj633-1",
+      "note": "分级-严重污染"
+    },
+    {
+      "id": "hard-001",
+      "query": "AQI 到了 150 算轻度还是中度",
+      "expected_source_id": "hj633-1",
+      "note": "分级边界"
+    },
+    {
+      "id": "hard-002",
+      "query": "空气污染等级一共分几档",
+      "expected_source_id": "hj633-1",
+      "note": "分级档数"
+    },
+    {
+      "id": "hard-003",
+      "query": "指数多少以上就属于污染了",
+      "expected_source_id": "hj633-1",
+      "note": "分级阈值"
+    },
+    {
+      "id": "hard-004",
+      "query": "臭氧的二十四小时平均浓度上限是多少",
+      "expected_source_id": "hj633-1",
+      "note": "24h均值"
+    },
+    {
+      "id": "hard-005",
+      "query": "雾霾严重程度是按什么指标划分的",
+      "expected_source_id": "hj633-1",
+      "note": "分级指标"
+    },
+    {
+      "id": "hard-006",
+      "query": "首要污染物是怎么定下来的",
+      "expected_source_id": "hj633-2",
+      "note": "首要污染物判定"
+    },
+    {
+      "id": "hard-007",
+      "query": "AQI 是由哪一个污染物决定的",
+      "expected_source_id": "hj633-2",
+      "note": "取最大值"
+    },
+    {
+      "id": "hard-008",
+      "query": "好几个污染物同时超标，报告里写哪个",
+      "expected_source_id": "hj633-2",
+      "note": "首要污染物"
+    },
+    {
+      "id": "hard-009",
+      "query": "分段线性插值在这里是干嘛用的",
+      "expected_source_id": "hj633-2",
+      "note": "IAQI算法"
+    },
+    {
+      "id": "hard-010",
+      "query": "各个污染物的分指数怎么算",
+      "expected_source_id": "hj633-2",
+      "note": "IAQI"
+    },
+    {
+      "id": "hard-011",
+      "query": "什么时候会出现并列首要污染物",
+      "expected_source_id": "hj633-2",
+      "note": "并列规则"
+    },
+    {
+      "id": "hard-012",
+      "query": "国标里 PM10 的浓度限值是多少",
+      "expected_source_id": "gb3095-1",
+      "note": "限值"
+    },
+    {
+      "id": "hard-013",
+      "query": "一类区和二类区的标准差在哪",
+      "expected_source_id": "gb3095-1",
+      "note": "分级"
+    },
+    {
+      "id": "hard-014",
+      "query": "居住区应该执行几级标准",
+      "expected_source_id": "gb3095-1",
+      "note": "二类区"
+    },
+    {
+      "id": "hard-015",
+      "query": "一级标准和二级标准哪个更严格",
+      "expected_source_id": "gb3095-1",
+      "note": "一级/二级"
+    },
+    {
+      "id": "hard-016",
+      "query": "二氧化硫的限值是一百五还是五十",
+      "expected_source_id": "gb3095-1",
+      "note": "SO2限值"
+    },
+    {
+      "id": "hard-017",
+      "query": "GB 3095 规定了哪些污染物的限值",
+      "expected_source_id": "gb3095-1",
+      "note": "标准范围"
+    },
+    {
+      "id": "hard-018",
+      "query": "雾霾天老人能出门吗",
+      "expected_source_id": "health-1",
+      "note": "敏感人群"
+    },
+    {
+      "id": "hard-019",
+      "query": "细颗粒物会不会进到血液里",
+      "expected_source_id": "health-1",
+      "note": "暴露途径"
+    },
+    {
+      "id": "hard-020",
+      "query": "AQI 超过一百的时候要不要戴口罩",
+      "expected_source_id": "health-1",
+      "note": "口罩建议"
+    },
+    {
+      "id": "hard-021",
+      "query": "小孩子这种天气能去外面玩吗",
+      "expected_source_id": "health-1",
+      "note": "敏感人群"
+    },
+    {
+      "id": "hard-022",
+      "query": "长期吸这种空气会得心脏病吗",
+      "expected_source_id": "health-1",
+      "note": "心血管风险"
+    },
+    {
+      "id": "hard-023",
+      "query": "哪些人最怕细颗粒物",
+      "expected_source_id": "health-1",
+      "note": "敏感人群"
+    },
+    {
+      "id": "hard-024",
+      "query": "夏天下午在户外跑步会不会伤肺",
+      "expected_source_id": "health-2",
+      "note": "午后+运动"
+    },
+    {
+      "id": "hard-025",
+      "query": "臭氧浓度什么时候最高",
+      "expected_source_id": "health-2",
+      "note": "夏季午后"
+    },
+    {
+      "id": "hard-026",
+      "query": "为什么午后不适合剧烈运动",
+      "expected_source_id": "health-2",
+      "note": "时段建议"
+    },
+    {
+      "id": "hard-027",
+      "query": "光化学烟雾对呼吸系统有什么影响",
+      "expected_source_id": "health-2",
+      "note": "呼吸道刺激"
+    },
+    {
+      "id": "hard-028",
+      "query": "夏天户外运动应该避开什么时段",
+      "expected_source_id": "health-2",
+      "note": "时段建议"
+    },
+    {
+      "id": "hard-029",
+      "query": "臭氧会导致胸闷咳嗽吗",
+      "expected_source_id": "health-2",
+      "note": "症状"
+    },
+    {
+      "id": "hard-030",
+      "query": "沙尘暴来了怎么防护",
+      "expected_source_id": "health-3",
+      "note": "沙尘"
+    },
+    {
+      "id": "hard-031",
+      "query": "刮沙尘的时候要不要戴口罩",
+      "expected_source_id": "health-3",
+      "note": "防尘口罩"
+    },
+    {
+      "id": "hard-032",
+      "query": "可吸入颗粒物会让人咳嗽咽炎吗",
+      "expected_source_id": "health-3",
+      "note": "上呼吸道"
+    },
+    {
+      "id": "hard-033",
+      "query": "沙尘天回家以后要注意什么",
+      "expected_source_id": "health-3",
+      "note": "清洗建议"
+    },
+    {
+      "id": "hard-034",
+      "query": "粗一点的颗粒物会沉在哪",
+      "expected_source_id": "health-3",
+      "note": "沉积部位"
+    },
+    {
+      "id": "hard-035",
+      "query": "沙尘天气对慢阻肺病人有什么影响",
+      "expected_source_id": "health-3",
+      "note": "慢阻肺"
+    },
+    {
+      "id": "hard-036",
+      "query": "住在马路边对身体有什么影响",
+      "expected_source_id": "health-4",
+      "note": "交通干道"
+    },
+    {
+      "id": "hard-037",
+      "query": "一氧化碳为什么会让人中毒",
+      "expected_source_id": "health-4",
+      "note": "CO机理"
+    },
+    {
+      "id": "hard-038",
+      "query": "汽车尾气里哪种成分危害最大",
+      "expected_source_id": "health-4",
+      "note": "交通源"
+    },
+    {
+      "id": "hard-039",
+      "query": "二氧化硫会让哮喘发作吗",
+      "expected_source_id": "health-4",
+      "note": "SO2"
+    },
+    {
+      "id": "hard-040",
+      "query": "长期吸汽车尾气会降低肺功能吗",
+      "expected_source_id": "health-4",
+      "note": "NO2"
+    },
+    {
+      "id": "hard-041",
+      "query": "哪种污染物在交通干道附近浓度高",
+      "expected_source_id": "health-4",
+      "note": "NO2"
+    },
+    {
+      "id": "hard-042",
+      "query": "红色预警学校会停课吗",
+      "expected_source_id": "emergency-1",
+      "note": "I级响应"
+    },
+    {
+      "id": "hard-043",
+      "query": "橙色预警企业要停产吗",
+      "expected_source_id": "emergency-1",
+      "note": "II级响应"
+    },
+    {
+      "id": "hard-044",
+      "query": "重污染预警有几个级别",
+      "expected_source_id": "emergency-1",
+      "note": "三级"
+    },
+    {
+      "id": "hard-045",
+      "query": "什么情况会限行",
+      "expected_source_id": "emergency-1",
+      "note": "机动车限行"
+    },
+    {
+      "id": "hard-046",
+      "query": "黄色预警对应几级响应",
+      "expected_source_id": "emergency-1",
+      "note": "III级响应"
+    },
+    {
+      "id": "hard-047",
+      "query": "一级响应和三级响应差在哪",
+      "expected_source_id": "emergency-1",
+      "note": "响应强度"
+    },
+    {
+      "id": "hard-048",
+      "query": "你们的预测准不准",
+      "expected_source_id": "forecast-1",
+      "note": "精度"
+    },
+    {
+      "id": "hard-049",
+      "query": "预测模型输入了哪些变量",
+      "expected_source_id": "forecast-1",
+      "note": "特征"
+    },
+    {
+      "id": "hard-050",
+      "query": "空气质量预报是怎么做出来的",
+      "expected_source_id": "forecast-1",
+      "note": "方法"
+    },
+    {
+      "id": "hard-051",
+      "query": "用的是哪个算法做预测",
+      "expected_source_id": "forecast-1",
+      "note": "模型"
+    },
+    {
+      "id": "hard-052",
+      "query": "预测精度大概多少",
+      "expected_source_id": "forecast-1",
+      "note": "R2"
+    },
+    {
+      "id": "hard-053",
+      "query": "预测时用到了历史数据吗",
+      "expected_source_id": "forecast-1",
+      "note": "滞后特征"
+    },
+    {
+      "id": "hard-054",
+      "query": "为什么北方冬天雾霾特别重",
+      "expected_source_id": "season-1",
+      "note": "供暖+静稳"
+    },
+    {
+      "id": "hard-055",
+      "query": "南方夏天为什么也不干净",
+      "expected_source_id": "season-1",
+      "note": "夏季臭氧"
+    },
+    {
+      "id": "hard-056",
+      "query": "春天扬尘是从哪来的",
+      "expected_source_id": "season-1",
+      "note": "沙尘"
+    },
+    {
+      "id": "hard-057",
+      "query": "哪个季节空气相对最好",
+      "expected_source_id": "season-1",
+      "note": "季节对比"
+    },
+    {
+      "id": "hard-058",
+      "query": "秸秆焚烧影响什么季节",
+      "expected_source_id": "season-1",
+      "note": "春秋"
+    },
+    {
+      "id": "hard-059",
+      "query": "供暖对空气质量有什么影响",
+      "expected_source_id": "season-1",
+      "note": "北方冬季"
+    },
+    {
+      "id": "hard-060",
+      "query": "污染严重的时候我在家该做什么",
+      "expected_source_id": "action-1",
+      "note": "分级应对"
+    },
+    {
+      "id": "hard-061",
+      "query": "中度污染要不要开净化器",
+      "expected_source_id": "action-1",
+      "note": "净化器"
+    },
+    {
+      "id": "hard-062",
+      "query": "雾霾天要不要关窗户",
+      "expected_source_id": "action-1",
+      "note": "关门窗"
+    },
+    {
+      "id": "hard-063",
+      "query": "重污染天能不能开窗通风",
+      "expected_source_id": "action-1",
+      "note": "关门窗"
+    },
+    {
+      "id": "hard-064",
+      "query": "空气不好的时候还要不要出门运动",
+      "expected_source_id": "action-1",
+      "note": "减少户外"
+    },
+    {
+      "id": "hard-065",
+      "query": "什么级别的污染需要停止户外活动",
+      "expected_source_id": "action-1",
+      "note": "严重污染停课"
+    }
+  ],
+  "refusal": [
+    {
+      "id": "neg-000",
+      "query": "个税专项附加扣除的标准是什么",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-001",
+      "query": "公司考勤制度对迟到怎么规定",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-002",
+      "query": "电影票能不能退改签",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-003",
+      "query": "快递保价赔偿标准是多少",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-004",
+      "query": "劳动合同试用期最长多久",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-005",
+      "query": "公积金怎么提取",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-006",
+      "query": "车辆年检需要准备什么材料",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-007",
+      "query": "信用卡逾期利息怎么算",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-008",
+      "query": "租房合同要注意哪些条款",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-009",
+      "query": "医保住院报销比例是多少",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-010",
+      "query": "高铁票退票手续费怎么收",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-011",
+      "query": "食品安全标准是谁制定的",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-012",
+      "query": "消防验收规范有哪些要求",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-013",
+      "query": "建筑抗震设计规范怎么规定",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-014",
+      "query": "数据安全法的处罚条款",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-015",
+      "query": "会计准则对存货怎么规定",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-016",
+      "query": "种子法对假种子怎么处罚",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-017",
+      "query": "个人信息保护法有什么要求",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-018",
+      "query": "离婚时财产怎么分割",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-019",
+      "query": "消费者权益保护法退货规定",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-020",
+      "query": "学校招生简章有什么要求",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-021",
+      "query": "无人机飞行需要报备吗",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-022",
+      "query": "小区养宠物有什么规定",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "neg-023",
+      "query": "物业管理条例怎么规定",
+      "expected_refused": true,
+      "note": "超纲-应拒答"
+    },
+    {
+      "id": "pos-024",
+      "query": "夏天下午在户外跑步会不会伤肺",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-025",
+      "query": "刮沙尘的时候怎么防护",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-026",
+      "query": "北方冬天为什么空气差",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-027",
+      "query": "小孩子能去外面玩吗",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-028",
+      "query": "一氧化碳为什么会让人中毒",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-029",
+      "query": "首要污染物是怎么定下来的",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-030",
+      "query": "粗一点的颗粒物会沉在哪",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-031",
+      "query": "哪个季节空气相对最好",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-032",
+      "query": "臭氧浓度什么时候最高",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-033",
+      "query": "一类区和二类区的标准差在哪",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-034",
+      "query": "沙尘天回家以后要注意什么",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-035",
+      "query": "分段线性插值在这里是干嘛用的",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-036",
+      "query": "为什么午后不适合剧烈运动",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-037",
+      "query": "长期吸这种空气会得心脏病吗",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-038",
+      "query": "什么情况会限行",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-039",
+      "query": "预测模型输入了哪些变量",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-040",
+      "query": "春天扬尘是从哪来的",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-041",
+      "query": "二氧化硫会让哮喘发作吗",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-042",
+      "query": "指数多少以上就属于污染了",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-043",
+      "query": "可吸入颗粒物会让人咳嗽咽炎吗",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-044",
+      "query": "雾霾天要不要关窗户",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-045",
+      "query": "各个污染物的分指数怎么算",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-046",
+      "query": "长期吸汽车尾气会降低肺功能吗",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    },
+    {
+      "id": "pos-047",
+      "query": "空气不好的时候还要不要出门运动",
+      "expected_refused": false,
+      "note": "领域内口语化-应回答"
+    }
+  ]
+}
