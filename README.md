@@ -42,7 +42,15 @@
 
 所有指标均可复现，且**已知短板都写在报告里**（分块收益未达统计显著、
 离线 provider 无法做语义拒答、LLM 侧为非确定性单次运行）。
-整改过程与全部消融数据见 **[docs/RAG_EVAL_REPORT.md](docs/RAG_EVAL_REPORT.md)**。
+
+## 相关文档
+
+| 文档 | 内容 |
+|---|---|
+| **[docs/WORKLOG.md](docs/WORKLOG.md)** | 工作记录留档：提交时间线、分项结论、最终指标、待办清单、环境变更 |
+| **[docs/RAG_EVAL_REPORT.md](docs/RAG_EVAL_REPORT.md)** | 评测整改报告：4 个发现、消融数据、统计检验、诚实边界 |
+| **[docs/CODE_AUDIT.md](docs/CODE_AUDIT.md)** | 代码与数据审查报告：7 项修复、9 项已知局限 |
+| [docs/CASE_STUDY.md](docs/CASE_STUDY.md) | 项目案例研究（Agent 设计与评测方法） |
 
 ## 运行
 
