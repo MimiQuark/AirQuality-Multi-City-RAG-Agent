@@ -10,16 +10,19 @@
 - 两套检索评测集：v1 简单集（110 条，题面照抄标题，仅作回归护栏）与 v2 困难集（66 条口语化提问，0% 含标题关键词）。
 - 平衡拒答集 48 条（24 条超纲应拒 + 24 条领域内应答），阈值经训练/留出拆分标定。
 
-### 实测指标（v2 困难集 + BGE 语义模型）
+### 实测指标（v2 困难集 + BGE 语义模型 + 结构分块）
 
-| 指标 | 数值 |
-|---|---:|
-| Recall@1 | 0.818 |
-| Recall@5 | 0.955 |
-| MRR | 0.870 |
-| 拒答准确率 | 0.958（应拒 0.958 / 应答 0.958） |
+| 检索指标 | 数值 | 端到端指标（规则版基线） | 数值 |
+|---|---:|---|---:|
+| Recall@1 | 0.773 | 工具路由正确率 | 0.667 |
+| Recall@5 | 0.985 | 事实要点覆盖率 | 0.583 |
+| MRR | 0.862 | 引用正确率 | 0.750 |
+| 拒答准确率 | 0.896（应拒 0.958 / 应答 0.833） | **幻觉引用数** | **0 / 6** |
 
-同一套集上离线 hash 仅 Recall@1 0.561 / 拒答 0.542，差距即语义检索的价值。
+同一套集上离线 hash 仅 Recall@1 0.500 / 拒答 0.562，差距即语义检索的价值。
+
+所有指标均可复现，且**已知短板都写在报告里**（分块收益未达统计显著、
+离线 provider 无法做语义拒答、端到端只跑了规则版基线）。
 整改过程与全部消融数据见 **[docs/RAG_EVAL_REPORT.md](docs/RAG_EVAL_REPORT.md)**。
 
 ## 运行
@@ -37,6 +40,15 @@ python scripts/record_checks.py
 python -m backend.evaluation.eval_rag --all --sweep
 ```
 
+其余评测与基准：
+
+```bash
+python -m backend.evaluation.bench_chunking        # 分块策略 A/B
+python -m backend.evaluation.bench_tool_parallel   # 工具并发基准
+python -m backend.evaluation.eval_e2e              # 端到端（规则版基线）
+python -m backend.evaluation.eval_e2e --answerer both   # 需配置 LLM_API_KEY
+```
+
 启用真实 BGE Embedding：
 
 ```bash
@@ -52,7 +64,8 @@ USE_REAL_EMBEDDINGS=1 EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5 uvicorn backend.mai
 
 ## 结果记录
 
-`reports/quality/` 保存测试、覆盖率和静态检查结果；`reports/rag_eval/` 保存全部样本级检索结果与摘要；启用 MLflow 后同时记录参数和指标。
+`reports/quality/` 保存测试、覆盖率和静态检查结果；`reports/rag_eval/` 保存全部样本级检索结果与摘要；
+`reports/bench/` 保存分块策略与工具并发基准；`reports/e2e/` 保存端到端评测明细；启用 MLflow 后同时记录参数和指标。
 
 ## 结果边界
 
@@ -61,5 +74,7 @@ USE_REAL_EMBEDDINGS=1 EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5 uvicorn backend.mai
 * 知识库当前仅 11 篇文档，检索本质是 11 路分类，绝对指标偏高，**不要外推到生产规模**。
 * 拒答阈值随 embedding 的相似度尺度变化，**换模型必须重新标定**
   （`python -m backend.evaluation.eval_rag --sweep`）。
-* **端到端回答质量尚未评测**：上述指标只覆盖检索与拒答，未覆盖 LLM 生成环节的事实性与幻觉率。
+* **端到端评测目前只有规则版基线**：本机未配置 LLM Key，真实大模型作答器尚未实测。
+* **分块策略的收益未达统计显著**（配对 bootstrap 95% CI 跨零），采用结构分块的依据是
+  "不切断条款"的结构性正确性，不是分数提升。
 * 外部 LLM 回答质量与实时数据源需配置模型/API 后单独运行，不将离线指标冒充线上效果。

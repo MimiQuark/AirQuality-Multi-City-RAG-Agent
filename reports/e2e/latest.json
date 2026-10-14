@@ -1,0 +1,520 @@
+{
+  "reports": [
+    {
+      "answerer": "rule-agent",
+      "metrics": {
+        "cases": 24,
+        "tool_routing_accuracy": 0.6666666666666666,
+        "fact_coverage": 0.5833333333333334,
+        "citation_correctness": 0.75,
+        "refusal_compliance": 0.875,
+        "refusal_citation_consistency": 1.0,
+        "hallucinated_citations": 0,
+        "cited_citations": 6
+      },
+      "results": [
+        {
+          "id": "e2e-p1",
+          "category": "policy",
+          "question": "PM2.5 的国家标准限值是多少",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "检索到相关标准/知识条款：\n【依据：GB 3095-2012 环境空气质量标准 浓度限值(gb3095-1)】\n  一、适用范围\n本条款规定环境空气污染物基本项目的浓度限值，用于环境空气质量评价与管理。\n二、功能区分类\n（一）一类区：自然保护区、风景名胜区和其他需要特殊保护的区域，执行一级标准；\n（二）二类区：居住区、",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [
+            "gb3095-1",
+            "hj633-1",
+            "gb3095-1"
+          ],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "限值类问题必须查标准条款"
+        },
+        {
+          "id": "e2e-p2",
+          "category": "policy",
+          "question": "AQI 到多少算重度污染",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": false,
+          "facts_ok": false,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "分级口径必须来自标准，不能由模型生成"
+        },
+        {
+          "id": "e2e-p3",
+          "category": "policy",
+          "question": "首要污染物是怎么确定的",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": false,
+          "facts_ok": false,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "判定规则属于标准条款"
+        },
+        {
+          "id": "e2e-p4",
+          "category": "policy",
+          "question": "红色预警学校会停课吗",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "get_comprehensive_alerts"
+          ],
+          "answer_excerpt": "北京综合预警:\n  🟠 预测NO2: 91.8 未来24h预测，预计12h后超标",
+          "routing_ok": false,
+          "facts_ok": false,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "预案条款类问题"
+        },
+        {
+          "id": "e2e-p5",
+          "category": "policy",
+          "question": "雾霾天老人能出门吗",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": false,
+          "facts_ok": false,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "健康防护类知识"
+        },
+        {
+          "id": "e2e-p6",
+          "category": "policy",
+          "question": "沙尘天气怎么防护",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": false,
+          "facts_ok": false,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "沙尘防护知识"
+        },
+        {
+          "id": "e2e-p7",
+          "category": "policy",
+          "question": "臭氧浓度什么时候最高",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": false,
+          "facts_ok": false,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "臭氧暴露特征"
+        },
+        {
+          "id": "e2e-p8",
+          "category": "policy",
+          "question": "一级标准和二级标准哪个更严格",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "检索到相关标准/知识条款：\n【依据：GB 3095-2012 环境空气质量标准 浓度限值(gb3095-1)】\n  五、限值应用说明\n（一）一级标准严于二级标准，执行级别由所在功能区确定；\n（二）浓度限值用于判定单日达标情况，与 AQI 分级的用途不同：前者用于环境质量评价，后者用于面向公众的信息发布；\n（三）评价时以",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [
+            "gb3095-1",
+            "gb3095-1",
+            "hj633-1"
+          ],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "标准分级口径"
+        },
+        {
+          "id": "e2e-d1",
+          "category": "data",
+          "question": "北京空气质量概况",
+          "expected_tools": [
+            "get_overview"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d2",
+          "category": "data",
+          "question": "北京未来 24 小时 PM2.5 会超标吗",
+          "expected_tools": [
+            "get_forecast"
+          ],
+          "actual_tools": [
+            "get_forecast"
+          ],
+          "answer_excerpt": "✅ 北京未来24小时PM25无超标风险\n  24h均值: 33.2 μg/m³ (阈值75)",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d3",
+          "category": "data",
+          "question": "六个城市空气质量对比",
+          "expected_tools": [
+            "get_cities_comparison"
+          ],
+          "actual_tools": [
+            "get_cities_comparison"
+          ],
+          "answer_excerpt": "六城市空气质量对比（近一年均值）:\n  北京: PM2.5=83.8 AQI=119.1 优良率=48.4%\n  成都: PM2.5=62.9 AQI=93.8 优良率=65.6%\n  西安: PM2.5=56.9 AQI=87.7 优良率=71.1%\n  广州: PM2.5=49.2 AQI=77.8 优良率=74.",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d4",
+          "category": "data",
+          "question": "北京哪个季节污染最重",
+          "expected_tools": [
+            "get_season_analysis"
+          ],
+          "actual_tools": [
+            "get_season_analysis"
+          ],
+          "answer_excerpt": "季节分析:\n  春: 66.3 μg/m³\n  夏: 59.4 μg/m³\n  秋: 93.8 μg/m³\n  冬: 116.5 μg/m³",
+          "routing_ok": true,
+          "facts_ok": false,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d5",
+          "category": "data",
+          "question": "北京各污染物之间的相关性",
+          "expected_tools": [
+            "get_correlation"
+          ],
+          "actual_tools": [
+            "get_correlation"
+          ],
+          "answer_excerpt": "PM2.5相关性:\n  与温度: -0.394\n  与湿度: 0.249\n  与风速: -0.375",
+          "routing_ok": true,
+          "facts_ok": false,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d6",
+          "category": "data",
+          "question": "北京当前有哪些告警",
+          "expected_tools": [
+            "get_alerts"
+          ],
+          "actual_tools": [
+            "get_alerts"
+          ],
+          "answer_excerpt": "",
+          "routing_ok": true,
+          "facts_ok": false,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d7",
+          "category": "data",
+          "question": "北京的综合预警情况",
+          "expected_tools": [
+            "get_comprehensive_alerts"
+          ],
+          "actual_tools": [
+            "get_comprehensive_alerts"
+          ],
+          "answer_excerpt": "北京综合预警:\n  🟠 预测NO2: 91.8 未来24h预测，预计12h后超标",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d8",
+          "category": "data",
+          "question": "上海的臭氧浓度概况",
+          "expected_tools": [
+            "get_overview"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "上海近一年数据:\n  PM2.5均值: 46.6 μg/m³\n  AQI均值: 79.8\n  优良率: 73.1%",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d9",
+          "category": "data",
+          "question": "广州和深圳哪个空气质量更好",
+          "expected_tools": [
+            "get_cities_comparison"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "广州近一年数据:\n  PM2.5均值: 49.2 μg/m³\n  AQI均值: 77.8\n  优良率: 74.7%",
+          "routing_ok": false,
+          "facts_ok": false,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d10",
+          "category": "data",
+          "question": "成都最近一周的 AQI 走势",
+          "expected_tools": [
+            "get_overview",
+            "get_forecast"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "成都近一年数据:\n  PM2.5均值: 62.9 μg/m³\n  AQI均值: 93.8\n  优良率: 65.6%",
+          "routing_ok": false,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": "期望不唯一：走势可用概览或预测工具"
+        },
+        {
+          "id": "e2e-o1",
+          "category": "ood",
+          "question": "个人所得税专项附加扣除标准是多少",
+          "expected_tools": [],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "未检索到相关标准条款，以下仅基于监测数据回答。该问题涉及的内容不在本系统环保知识库范围内，为避免编造条款编号，此处不引用任何标准。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o2",
+          "category": "ood",
+          "question": "电影票能不能退改签",
+          "expected_tools": [],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": false,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o3",
+          "category": "ood",
+          "question": "建筑抗震设计规范怎么规定",
+          "expected_tools": [],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "未检索到相关标准条款，以下仅基于监测数据回答。该问题涉及的内容不在本系统环保知识库范围内，为避免编造条款编号，此处不引用任何标准。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o4",
+          "category": "ood",
+          "question": "公积金怎么提取",
+          "expected_tools": [],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": false,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o5",
+          "category": "ood",
+          "question": "劳动合同试用期最长多久",
+          "expected_tools": [],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京近一年数据:\n  PM2.5均值: 83.8 μg/m³\n  AQI均值: 119.1\n  优良率: 48.4%",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": false,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o6",
+          "category": "ood",
+          "question": "快递保价赔偿标准是多少",
+          "expected_tools": [],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "未检索到相关标准条款，以下仅基于监测数据回答。该问题涉及的内容不在本系统环保知识库范围内，为避免编造条款编号，此处不引用任何标准。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "hallucinated_standards": [],
+          "note": ""
+        }
+      ]
+    }
+  ]
+}
