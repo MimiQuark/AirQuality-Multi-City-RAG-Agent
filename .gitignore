@@ -15,6 +15,11 @@ venv/
 *.env
 !.env.example
 
+# 运行时产物：由接口调用/调度生成，不应提交
+backend/data/feedback.jsonl
+data/reports/*.md
+!data/reports/2026-09-02.md
+
 # Local runtime state
 *.log
 _reg.log

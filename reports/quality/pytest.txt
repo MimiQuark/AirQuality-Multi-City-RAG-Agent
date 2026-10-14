@@ -16,5 +16,5 @@ backend\rag\service.py        166      8     48     11    91%   45, 51, 54->71, 
 TOTAL                         280     23     60     14    89%
 Coverage XML written to file reports/quality/coverage.xml
 Required test coverage of 70.0% reached. Total coverage: 89.12%
-11 passed in 2.36s
+11 passed in 2.84s
 

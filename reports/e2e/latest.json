@@ -678,6 +678,721 @@
           "note": ""
         }
       ]
+    },
+    {
+      "answerer": "llm-agent",
+      "metrics": {
+        "cases": 24,
+        "tool_routing_accuracy": 0.9166666666666666,
+        "fact_coverage": 1.0,
+        "citation_correctness": 0.6666666666666666,
+        "refusal_compliance": 0.9166666666666666,
+        "refusal_citation_consistency": 0.9583333333333334,
+        "hallucinated_citations": 3,
+        "hallucinated_clauses": 1,
+        "structured_citation_correctness": 0.9166666666666666,
+        "structured_hallucinated_citations": 0,
+        "cited_citations": 18
+      },
+      "results": [
+        {
+          "id": "e2e-p1",
+          "category": "policy",
+          "question": "PM2.5 的国家标准限值是多少",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "PM2.5的国家标准限值如下：\n- 一级标准：35微克每立方米\n- 二级标准：75微克每立方米\n【依据：GB 3095-2012 环境空气质量标准 浓度限值】",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB3095-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [
+            "gb3095-1",
+            "gb3095-1",
+            "hj633-1"
+          ],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": "限值类问题必须查标准条款"
+        },
+        {
+          "id": "e2e-p2",
+          "category": "policy",
+          "question": "AQI 到多少算重度污染",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "AQI达到201至300时，空气质量为重度污染【依据：HJ 633-1 环境空气质量指数(AQI)技术规定】。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [
+            "hj633-1",
+            "hj633-2",
+            "gb3095-1"
+          ],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": "分级口径必须来自标准，不能由模型生成"
+        },
+        {
+          "id": "e2e-p3",
+          "category": "policy",
+          "question": "首要污染物是怎么确定的",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "首要污染物的确定依据《HJ 633-2012 首要污染物与 IAQI 计算方法》的规定。当空气质量指数（AQI）大于50时，判定IAQI最大的污染物为首要污染物；如果多项污染物的IAQI并列最大，则这些污染物并列判定为首要污染物；当AQI不大于50时，不发布首要污染物。例如，如果某日PM2.5的IAQI为120、PM1",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "HJ633-2012",
+            "HJ633-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [
+            "hj633-2",
+            "hj633-2",
+            "action-1"
+          ],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": "判定规则属于标准条款"
+        },
+        {
+          "id": "e2e-p4",
+          "category": "policy",
+          "question": "红色预警学校会停课吗",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "红色预警学校会停课。根据《重污染天气应急预案分级响应》中的规定，红色预警启动条件为预测严重污染将持续3天，对应I级响应措施，其中包括中小学停课【依据：重污染天气应急预案分级响应(emergency-1)】。因此，在红色预警期间，学校会根据应急预案采取停课措施。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [
+            "emergency-1"
+          ],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [
+            "emergency-1",
+            "action-1",
+            "health-1"
+          ],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": "预案条款类问题"
+        },
+        {
+          "id": "e2e-p5",
+          "category": "policy",
+          "question": "雾霾天老人能出门吗",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "雾霾天气老人应尽量避免外出。根据查询到的政策信息，可吸入颗粒物（PM10）主要沉积在上呼吸道，不易深入肺泡，但仍然可能引发咳嗽、咽炎等上呼吸道不适，加重慢性阻塞性肺病等既有呼吸道疾病，并对眼部和鼻腔黏膜有刺激作用【依据：PM10 对健康的影响与防护(health-3)】。在空气污染应对措施中，当空气质量指数（AQI）达",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [
+            "health-3",
+            "action-1"
+          ],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [
+            "health-3",
+            "health-4",
+            "action-1"
+          ],
+          "structured_ok": false,
+          "structured_hallucinated": [],
+          "note": "健康防护类知识"
+        },
+        {
+          "id": "e2e-p6",
+          "category": "policy",
+          "question": "沙尘天气怎么防护",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "在沙尘天气中，为了有效防护，可以采取以下措施：\n\n1. 外出时佩戴防尘口罩，以减少可吸入颗粒物（PM10）对上呼吸道的直接接触。\n2. 回家后清洗面部和鼻腔，并及时更换外衣，以去除身体上的扬尘。\n3. 关闭门窗，减少室内扬尘的进入。\n4. 沙尘天气结束后，可适当通风，但需避免扬尘再次进入室内。\n\n这些防护建议依据的是【",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [
+            "health-3",
+            "action-1",
+            "emergency-1"
+          ],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": "沙尘防护知识"
+        },
+        {
+          "id": "e2e-p7",
+          "category": "policy",
+          "question": "臭氧浓度什么时候最高",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "get_season_analysis"
+          ],
+          "answer_excerpt": "根据提供的季节性分析数据，臭氧浓度最高的季节是冬季，平均值为153.5。这一数据表明，在冬季，臭氧的浓度相较于春季、夏季和秋季都要高。需要注意的是，虽然这里没有提供具体的臭氧浓度数值，但根据这一平均值，可以推断出冬季臭氧污染的风险较高。在制定相关环境保护措施时，应特别关注冬季的臭氧污染情况。",
+          "routing_ok": false,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": false,
+          "structured_hallucinated": [],
+          "note": "臭氧暴露特征"
+        },
+        {
+          "id": "e2e-p8",
+          "category": "policy",
+          "question": "一级标准和二级标准哪个更严格",
+          "expected_tools": [
+            "query_policy"
+          ],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "一级标准比二级标准更严格。根据GB 3095-2012《环境空气质量标准》的规定，PM2.5的一级标准限值为35微克每立方米，而二级标准限值为75微克每立方米；PM10的一级标准限值为50微克每立方米，二级标准限值为150微克每立方米；二氧化硫（SO2）的一级标准限值为50微克每立方米，二级标准限值为150微克每立方米",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB3095-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [
+            "gb3095-1",
+            "gb3095-1",
+            "hj633-1"
+          ],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": "标准分级口径"
+        },
+        {
+          "id": "e2e-d1",
+          "category": "data",
+          "question": "北京空气质量概况",
+          "expected_tools": [
+            "get_overview"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "北京空气质量概况如下：\n\n- 监测数据覆盖时间：2025年8月31日至2026年8月30日，共计8760条记录。\n- 平均PM2.5浓度：83.8微克/立方米。\n- 平均AQI指数：119.1。\n- 良好天数比例：48.4%。\n\n根据《环境空气质量标准》（GB 3095-2012），北京空气质量整体处于轻度污染水平。其",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB3095-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d2",
+          "category": "data",
+          "question": "北京未来 24 小时 PM2.5 会超标吗",
+          "expected_tools": [
+            "get_forecast"
+          ],
+          "actual_tools": [
+            "get_forecast"
+          ],
+          "answer_excerpt": "北京未来24小时PM2.5浓度预计不会超标。根据监测数据，预计24小时内的PM2.5最大值是42.9微克/立方米，平均值是33.2微克/立方米，均低于国家环境空气质量标准中的二级标准限值75微克/立方米【依据：环境空气质量标准（GB 3095-2012）】。因此，可以判断北京未来24小时的空气质量处于安全水平。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB3095-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d3",
+          "category": "data",
+          "question": "六个城市空气质量对比",
+          "expected_tools": [
+            "get_cities_comparison"
+          ],
+          "actual_tools": [
+            "get_cities_comparison"
+          ],
+          "answer_excerpt": "六个城市的空气质量对比如下：\n\n1. 北京：平均PM2.5浓度为83.8微克/立方米，平均PM10浓度为96.5微克/立方米，平均AQI为119.1，空气质量指数属于轻度污染。北京的好天数为48.4天，平均气温为14.2摄氏度，平均湿度为54.2%。\n\n2. 成都：平均PM2.5浓度为62.9微克/立方米，平均PM10",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d4",
+          "category": "data",
+          "question": "北京哪个季节污染最重",
+          "expected_tools": [
+            "get_season_analysis"
+          ],
+          "actual_tools": [
+            "get_season_analysis"
+          ],
+          "answer_excerpt": "北京冬季污染最重，平均PM2.5浓度为116.5微克/立方米，平均AQI为153.5，均高于其他季节。这表明冬季北京的空气质量相对较差。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d5",
+          "category": "data",
+          "question": "北京各污染物之间的相关性",
+          "expected_tools": [
+            "get_correlation"
+          ],
+          "actual_tools": [
+            "get_correlation"
+          ],
+          "answer_excerpt": "北京各污染物之间的相关性如下：\n\n1. PM2.5与PM10的相关性为0.926，表明两者之间存在较强的正相关关系。\n2. PM2.5与SO2的相关性为0.862，表明两者之间存在较强的正相关关系。\n3. PM2.5与NO2的相关性为0.412，表明两者之间存在中等程度的正相关关系。\n4. PM2.5与CO的相关性为0",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB3095-2012"
+          ],
+          "cited_clauses": [
+            "第4.1条"
+          ],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [
+            "第4.1条"
+          ],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d6",
+          "category": "data",
+          "question": "北京当前有哪些告警",
+          "expected_tools": [
+            "get_alerts"
+          ],
+          "actual_tools": [
+            "get_alerts"
+          ],
+          "answer_excerpt": "北京当前没有告警。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d7",
+          "category": "data",
+          "question": "北京的综合预警情况",
+          "expected_tools": [
+            "get_comprehensive_alerts"
+          ],
+          "actual_tools": [
+            "get_comprehensive_alerts"
+          ],
+          "answer_excerpt": "北京的综合预警情况如下：\n\n根据最新的历史基座数据（截止至2026-08-30 23:00:00），目前北京市没有发布污染预警。但是，根据未来24小时的预测，预计12小时后，北京市的NO2（二氧化氮）浓度将达到91.8，超过了黄色预警的阈值80，预计将触发黄色预警。\n\n建议市民注意空气质量变化，减少户外活动，特别是老人",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB3095-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d8",
+          "category": "data",
+          "question": "上海的臭氧浓度概况",
+          "expected_tools": [
+            "get_overview"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "上海市在2025年8月31日至2026年8月30日期间的臭氧浓度概况如下：\n\n- 监测记录总数为8760条。\n- 平均臭氧浓度为46.6微克/立方米。\n- 平均空气质量指数（AQI）为79.8，属于良好水平。\n- 良好天数占比为73.1%。\n\n根据《环境空气质量标准》（GB 3095-2012）【依据：标题(GB 30",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB3095-2012",
+            "GB3095-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d9",
+          "category": "data",
+          "question": "广州和深圳哪个空气质量更好",
+          "expected_tools": [
+            "get_cities_comparison"
+          ],
+          "actual_tools": [
+            "get_cities_comparison"
+          ],
+          "answer_excerpt": "根据提供的空气质量监测数据，深圳的空气质量优于广州。具体来说，深圳的PM2.5平均浓度为33.5微克/立方米，而广州的平均浓度为49.2微克/立方米。PM2.5是衡量空气质量的重要指标之一，数值越低表示空气质量越好。此外，深圳的空气质量指数（AQI）平均值为69.0，而广州的AQI平均值为77.8。AQI数值越低，表示",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-d10",
+          "category": "data",
+          "question": "成都最近一周的 AQI 走势",
+          "expected_tools": [
+            "get_overview",
+            "get_forecast"
+          ],
+          "actual_tools": [
+            "get_overview"
+          ],
+          "answer_excerpt": "成都最近一周的空气质量指数（AQI）走势显示，平均AQI为93.8，属于良好空气质量范围。根据中国环境保护部发布的《环境空气质量指数（AQI）技术规定（HJ633-2012）》，AQI在0-100范围内表示空气质量状况，其中50-100为良好空气质量。因此，成都最近一周的空气质量整体较好。\n\n具体到成都的AQI走势，由",
+          "routing_ok": false,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "HJ633-2012",
+            "GB3095-2012"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": "期望不唯一：走势可用概览或预测工具"
+        },
+        {
+          "id": "e2e-o1",
+          "category": "ood",
+          "question": "个人所得税专项附加扣除标准是多少",
+          "expected_tools": [],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "未检索到相关标准条款，以下仅基于监测数据。个人所得税专项附加扣除标准包括子女教育、继续教育、大病医疗、住房贷款利息、住房租金和赡养老人等六项，具体扣除标准如下：\n- 子女教育：每个子女每月1000元；\n- 继续教育：每年4800元或4000元（学历教育4000元，职业资格继续教育4800元）；\n- 大病医疗：在一个纳税",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o2",
+          "category": "ood",
+          "question": "电影票能不能退改签",
+          "expected_tools": [],
+          "actual_tools": [],
+          "answer_excerpt": "电影票能否退改签，通常取决于购票平台的具体政策以及电影院的退改签规定。以下是一些常见情况：\n\n1. 在线购票平台通常会有明确的退改签政策，用户在购票时可以查看具体条款。例如，某些平台可能规定，在电影开场前一定时间内可以免费退改签，超过这个时间可能需要收取一定的手续费。\n\n2. 电影院方面，不同院线的退改签政策可能有所不",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": false,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o3",
+          "category": "ood",
+          "question": "建筑抗震设计规范怎么规定",
+          "expected_tools": [],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "未检索到相关标准条款，以下仅基于一般知识回答。\n\n建筑抗震设计规范通常包括《建筑抗震设计规范》（GB 50011-2010）等。这些规范规定了建筑抗震设计的基本原则、计算方法、抗震构造要求等。具体规定如下：\n\n1. 抗震设防类别：根据建筑的重要性、使用功能、抗震性能要求等因素，将建筑分为甲、乙、丙、丁四个抗震设防类别。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": false,
+          "refusal_ok": true,
+          "consistency_ok": false,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [
+            "GB50011-2010",
+            "GB50011-2010"
+          ],
+          "cited_clauses": [],
+          "hallucinated_standards": [
+            "GB50011-2010",
+            "GB50011-2010"
+          ],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o4",
+          "category": "ood",
+          "question": "公积金怎么提取",
+          "expected_tools": [],
+          "actual_tools": [],
+          "answer_excerpt": "公积金提取的具体操作流程因地区而异，以下是一般情况下的提取流程：\n\n1. **提取条件**：通常情况下，公积金提取需要满足以下条件之一：\n   - 购买自住住房；\n   - 支付房租；\n   - 还款住房贷款；\n   - 紧急情况，如医疗、教育等。\n\n2. **提取额度**：提取额度通常与个人账户内的公积金余额有关，具",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": false,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o5",
+          "category": "ood",
+          "question": "劳动合同试用期最长多久",
+          "expected_tools": [],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "未检索到相关标准条款，以下仅基于监测数据。根据《中华人民共和国劳动合同法》规定，劳动合同试用期最长为6个月。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        },
+        {
+          "id": "e2e-o6",
+          "category": "ood",
+          "question": "快递保价赔偿标准是多少",
+          "expected_tools": [],
+          "actual_tools": [
+            "query_policy"
+          ],
+          "answer_excerpt": "未检索到相关标准条款，以下仅基于监测数据。关于快递保价赔偿标准，具体金额会根据快递公司和服务类型的不同而有所差异，建议您直接咨询相应的快递公司以获取准确信息。",
+          "routing_ok": true,
+          "facts_ok": true,
+          "citation_ok": true,
+          "refusal_ok": true,
+          "consistency_ok": true,
+          "cited_ids": [],
+          "hallucinated_ids": [],
+          "cited_standards": [],
+          "cited_clauses": [],
+          "hallucinated_standards": [],
+          "hallucinated_clauses": [],
+          "structured_ids": [],
+          "structured_ok": true,
+          "structured_hallucinated": [],
+          "note": ""
+        }
+      ]
     }
   ]
 }
