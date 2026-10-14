@@ -1,0 +1,735 @@
+{
+  "total": 60,
+  "correct": 60,
+  "partial": 0,
+  "accuracy": 1.0,
+  "partial_accuracy": 1.0,
+  "by_category": {
+    "realtime": {
+      "total": 6,
+      "correct": 6,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "forecast": {
+      "total": 7,
+      "correct": 7,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "compare": {
+      "total": 6,
+      "correct": 6,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "alerts": {
+      "total": 6,
+      "correct": 6,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "season": {
+      "total": 6,
+      "correct": 6,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "correlation": {
+      "total": 6,
+      "correct": 6,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "overview": {
+      "total": 6,
+      "correct": 6,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "multi_hop": {
+      "total": 5,
+      "correct": 5,
+      "partial": 0,
+      "accuracy": 1.0
+    },
+    "hard": {
+      "total": 12,
+      "correct": 12,
+      "partial": 0,
+      "accuracy": 1.0
+    }
+  },
+  "details": [
+    {
+      "question": "北京现在空气质量怎么样",
+      "category": "realtime",
+      "expected": [
+        "get_realtime"
+      ],
+      "actual": [
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海实时PM2.5浓度是多少",
+      "category": "realtime",
+      "expected": [
+        "get_realtime"
+      ],
+      "actual": [
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "guangzhou 当前空气状况如何",
+      "category": "realtime",
+      "expected": [
+        "get_realtime"
+      ],
+      "actual": [
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "深圳此刻的AQI是多少",
+      "category": "realtime",
+      "expected": [
+        "get_realtime"
+      ],
+      "actual": [
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都今天空气质量好吗",
+      "category": "realtime",
+      "expected": [
+        "get_realtime"
+      ],
+      "actual": [
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "xian 现在的一氧化碳浓度是多少",
+      "category": "realtime",
+      "expected": [
+        "get_realtime"
+      ],
+      "actual": [
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海明天PM2.5会超标吗",
+      "category": "forecast",
+      "expected": [
+        "get_forecast"
+      ],
+      "actual": [
+        "get_forecast"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京未来24小时臭氧预测",
+      "category": "forecast",
+      "expected": [
+        "get_forecast"
+      ],
+      "actual": [
+        "get_forecast"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "广州后天PM10预报",
+      "category": "forecast",
+      "expected": [
+        "get_forecast"
+      ],
+      "actual": [
+        "get_forecast"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "shenzhen 明天NO2将会如何变化",
+      "category": "forecast",
+      "expected": [
+        "get_forecast"
+      ],
+      "actual": [
+        "get_forecast"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都预计未来二氧化硫走势",
+      "category": "forecast",
+      "expected": [
+        "get_forecast"
+      ],
+      "actual": [
+        "get_forecast"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "西安明天二氧化氮会不会超标",
+      "category": "forecast",
+      "expected": [
+        "get_forecast"
+      ],
+      "actual": [
+        "get_forecast"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "beijing 明天空气质量预报",
+      "category": "forecast",
+      "expected": [
+        "get_forecast"
+      ],
+      "actual": [
+        "get_forecast"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "六个城市空气质量对比",
+      "category": "compare",
+      "expected": [
+        "get_cities_comparison"
+      ],
+      "actual": [
+        "get_cities_comparison"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "各城市排名",
+      "category": "compare",
+      "expected": [
+        "get_cities_comparison"
+      ],
+      "actual": [
+        "get_cities_comparison"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京和上海哪个城市空气更好",
+      "category": "compare",
+      "expected": [
+        "get_cities_comparison"
+      ],
+      "actual": [
+        "get_cities_comparison"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "比较一下广州和深圳的PM2.5水平",
+      "category": "compare",
+      "expected": [
+        "get_cities_comparison"
+      ],
+      "actual": [
+        "get_cities_comparison"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都和西安空气质量对比",
+      "category": "compare",
+      "expected": [
+        "get_cities_comparison"
+      ],
+      "actual": [
+        "get_cities_comparison"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "哪个城市的臭氧污染最严重",
+      "category": "compare",
+      "expected": [
+        "get_cities_comparison"
+      ],
+      "actual": [
+        "get_cities_comparison"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都的综合预警",
+      "category": "alerts",
+      "expected": [
+        "get_comprehensive_alerts"
+      ],
+      "actual": [
+        "get_comprehensive_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京预警中心有什么消息",
+      "category": "alerts",
+      "expected": [
+        "get_comprehensive_alerts"
+      ],
+      "actual": [
+        "get_comprehensive_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "广州所有告警",
+      "category": "alerts",
+      "expected": [
+        "get_comprehensive_alerts"
+      ],
+      "actual": [
+        "get_comprehensive_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "深圳有哪些污染物超标",
+      "category": "alerts",
+      "expected": [
+        "get_comprehensive_alerts"
+      ],
+      "actual": [
+        "get_comprehensive_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "西安空气污染警报",
+      "category": "alerts",
+      "expected": [
+        "get_comprehensive_alerts"
+      ],
+      "actual": [
+        "get_comprehensive_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海空气超标提醒",
+      "category": "alerts",
+      "expected": [
+        "get_comprehensive_alerts"
+      ],
+      "actual": [
+        "get_comprehensive_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "广州冬季臭氧季节分析",
+      "category": "season",
+      "expected": [
+        "get_season_analysis"
+      ],
+      "actual": [
+        "get_season_analysis"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京夏天PM2.5的季节变化",
+      "category": "season",
+      "expected": [
+        "get_season_analysis"
+      ],
+      "actual": [
+        "get_season_analysis"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海春季PM10季节分析",
+      "category": "season",
+      "expected": [
+        "get_season_analysis"
+      ],
+      "actual": [
+        "get_season_analysis"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "深圳秋季臭氧浓度季节特征",
+      "category": "season",
+      "expected": [
+        "get_season_analysis"
+      ],
+      "actual": [
+        "get_season_analysis"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "chengdu 冬季二氧化硫季节分析",
+      "category": "season",
+      "expected": [
+        "get_season_analysis"
+      ],
+      "actual": [
+        "get_season_analysis"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "西安四季中哪个季节NO2最高",
+      "category": "season",
+      "expected": [
+        "get_season_analysis"
+      ],
+      "actual": [
+        "get_season_analysis"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "西安污染物和气象因子的相关性",
+      "category": "correlation",
+      "expected": [
+        "get_correlation"
+      ],
+      "actual": [
+        "get_correlation"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京PM2.5与温度的关系",
+      "category": "correlation",
+      "expected": [
+        "get_correlation"
+      ],
+      "actual": [
+        "get_correlation"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海湿度和臭氧之间有什么相关性",
+      "category": "correlation",
+      "expected": [
+        "get_correlation"
+      ],
+      "actual": [
+        "get_correlation"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "广州风速对PM10的影响",
+      "category": "correlation",
+      "expected": [
+        "get_correlation"
+      ],
+      "actual": [
+        "get_correlation"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都空气污染与气象因素分析",
+      "category": "correlation",
+      "expected": [
+        "get_correlation"
+      ],
+      "actual": [
+        "get_correlation"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "shenzhen 污染物与湿度相关吗",
+      "category": "correlation",
+      "expected": [
+        "get_correlation"
+      ],
+      "actual": [
+        "get_correlation"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京空气质量概览",
+      "category": "overview",
+      "expected": [
+        "get_overview"
+      ],
+      "actual": [
+        "get_overview"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海这一年空气情况怎么样",
+      "category": "overview",
+      "expected": [
+        "get_overview"
+      ],
+      "actual": [
+        "get_overview"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "广州空气怎么样",
+      "category": "overview",
+      "expected": [
+        "get_overview"
+      ],
+      "actual": [
+        "get_overview"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "深圳年均空气质量如何",
+      "category": "overview",
+      "expected": [
+        "get_overview"
+      ],
+      "actual": [
+        "get_overview"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都空气概况",
+      "category": "overview",
+      "expected": [
+        "get_overview"
+      ],
+      "actual": [
+        "get_overview"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "xian 空气总体水平介绍",
+      "category": "overview",
+      "expected": [
+        "get_overview"
+      ],
+      "actual": [
+        "get_overview"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "深圳实时空气和未来预测",
+      "category": "multi_hop",
+      "expected": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "actual": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海现在空气如何，未来会超标吗",
+      "category": "multi_hop",
+      "expected": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "actual": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京现在PM2.5多少，明天会不会更高",
+      "category": "multi_hop",
+      "expected": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "actual": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "广州当前空气质量，明天会好吗",
+      "category": "multi_hop",
+      "expected": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "actual": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都此刻臭氧浓度怎么样，未来24小时会超标吗",
+      "category": "multi_hop",
+      "expected": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "actual": [
+        "get_forecast",
+        "get_realtime"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "北京当前有哪些污染物超标告警",
+      "category": "hard",
+      "expected": [
+        "get_alerts"
+      ],
+      "actual": [
+        "get_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "成都PM10告警详情",
+      "category": "hard",
+      "expected": [
+        "get_alerts"
+      ],
+      "actual": [
+        "get_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "广州二氧化硫超标提醒列表",
+      "category": "hard",
+      "expected": [
+        "get_alerts"
+      ],
+      "actual": [
+        "get_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "深圳今天空气有哪些告警",
+      "category": "hard",
+      "expected": [
+        "get_alerts"
+      ],
+      "actual": [
+        "get_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "上海NO2超标警报明细",
+      "category": "hard",
+      "expected": [
+        "get_alerts"
+      ],
+      "actual": [
+        "get_alerts"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "帮我训练北京的空气质量模型",
+      "category": "hard",
+      "expected": [
+        "train_models"
+      ],
+      "actual": [
+        "train_models"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "给成都重新训练模型",
+      "category": "hard",
+      "expected": [
+        "train_models"
+      ],
+      "actual": [
+        "train_models"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "西安的模型重新学习一下",
+      "category": "hard",
+      "expected": [
+        "train_models"
+      ],
+      "actual": [
+        "train_models"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "更新深圳的模型参数",
+      "category": "hard",
+      "expected": [
+        "train_models"
+      ],
+      "actual": [
+        "train_models"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "训练广州的空气分析模型",
+      "category": "hard",
+      "expected": [
+        "train_models"
+      ],
+      "actual": [
+        "train_models"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "空气质量标准是什么",
+      "category": "hard",
+      "expected": [
+        "query_policy"
+      ],
+      "actual": [
+        "query_policy"
+      ],
+      "status": "完全正确"
+    },
+    {
+      "question": "PM2.5的国家标准限值是多少",
+      "category": "hard",
+      "expected": [
+        "query_policy"
+      ],
+      "actual": [
+        "query_policy"
+      ],
+      "status": "完全正确"
+    }
+  ]
+}

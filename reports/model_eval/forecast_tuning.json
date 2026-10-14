@@ -1,0 +1,49 @@
+{
+  "created_at": "2026-10-07T13:23:15.523157+00:00",
+  "city": "beijing",
+  "target": "PM25",
+  "split": "70/15/15 chronological",
+  "results": {
+    "random_forest_baseline": {
+      "mae": 6.810991030698089,
+      "rmse": 9.68173500500647,
+      "exceedance_f1": 0.8937142857142857
+    },
+    "extra_trees": {
+      "mae": 7.262086377473366,
+      "rmse": 10.688504575491937,
+      "exceedance_f1": 0.9003436426116839
+    },
+    "hist_gradient_boosting": {
+      "mae": 6.668270501136646,
+      "rmse": 9.60517496153568,
+      "exceedance_f1": 0.9003359462486002
+    }
+  },
+  "best_model": "hist_gradient_boosting",
+  "promoted": true,
+  "best_params": {
+    "categorical_features": "from_dtype",
+    "early_stopping": "auto",
+    "interaction_cst": null,
+    "l2_regularization": 0.0,
+    "learning_rate": 0.1,
+    "loss": "squared_error",
+    "max_bins": 255,
+    "max_depth": null,
+    "max_features": 1.0,
+    "max_iter": 100,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 20,
+    "monotonic_cst": null,
+    "n_iter_no_change": 10,
+    "quantile": null,
+    "random_state": 42,
+    "scoring": "loss",
+    "tol": 1e-07,
+    "validation_fraction": 0.1,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "promotion_rule": "test RMSE lower and exceedance F1 not lower than baseline"
+}

@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  env-monitor-agent:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # LLM 配置（可选，不配置则使用规则版 Agent）
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.deepseek.com/v1}
+      - LLM_MODEL=${LLM_MODEL:-deepseek-chat}
+      
+      # 实时数据（可选）
+      - WAQI_TOKEN=${WAQI_TOKEN:-}
+      
+      # 和风天气（可选）
+      - QWEATHER_KEY=${QWEATHER_KEY:-}
+    volumes:
+      - ./data:/app/data
+      - ./backend/models:/app/backend/models
+    restart: unless-stopped

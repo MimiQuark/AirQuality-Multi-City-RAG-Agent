@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Local runtime state
+*.log
+_reg.log
+_preflight.err
+data/trace.db
+backend/models/*.pkl
+backend/backend/models/*.pkl
+*.7z

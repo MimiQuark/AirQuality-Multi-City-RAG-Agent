@@ -1,0 +1,776 @@
+{
+  "retrieval": [
+    {
+      "id": "rag-0",
+      "query": "HJ 633-2012 环境空气质量指数(AQI)技术规定",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-1",
+      "query": "请解释HJ 633-2012 环境空气质量指数(AQI)技术规定",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-2",
+      "query": "HJ 633-2012 环境空气质量指数(AQI)技术规定的详细规定是什么",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-3",
+      "query": "HJ 633-2012 环境空气质量指数(AQI)技术规定有哪些要求",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-4",
+      "query": "关于HJ 633-2012 环境空气质量指数(AQI)技术规定的标准",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-5",
+      "query": "我想了解HJ 633-2012 环境空气质量指数(AQI)技术规定",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-6",
+      "query": "HJ 633-2012 环境空气质量指数(AQI)技术规定怎么规定",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-7",
+      "query": "HJ 633-2012 环境空气质量指数(AQI)技术规定的具体内容",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-8",
+      "query": "HJ 633-2012 环境空气质量指数(AQI)技术规定有哪些关键指标",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-9",
+      "query": "HJ 633-2012 环境空气质量指数(AQI)技术规定适用于什么情况",
+      "expected_source_id": "hj633-1"
+    },
+    {
+      "id": "rag-10",
+      "query": "HJ 633-2012 首要污染物与 IAQI 计算方法",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-11",
+      "query": "请解释HJ 633-2012 首要污染物与 IAQI 计算方法",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-12",
+      "query": "HJ 633-2012 首要污染物与 IAQI 计算方法的详细规定是什么",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-13",
+      "query": "HJ 633-2012 首要污染物与 IAQI 计算方法有哪些要求",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-14",
+      "query": "关于HJ 633-2012 首要污染物与 IAQI 计算方法的标准",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-15",
+      "query": "我想了解HJ 633-2012 首要污染物与 IAQI 计算方法",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-16",
+      "query": "HJ 633-2012 首要污染物与 IAQI 计算方法怎么规定",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-17",
+      "query": "HJ 633-2012 首要污染物与 IAQI 计算方法的具体内容",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-18",
+      "query": "HJ 633-2012 首要污染物与 IAQI 计算方法有哪些关键指标",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-19",
+      "query": "HJ 633-2012 首要污染物与 IAQI 计算方法适用于什么情况",
+      "expected_source_id": "hj633-2"
+    },
+    {
+      "id": "rag-20",
+      "query": "GB 3095-2012 环境空气质量标准 浓度限值",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-21",
+      "query": "请解释GB 3095-2012 环境空气质量标准 浓度限值",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-22",
+      "query": "GB 3095-2012 环境空气质量标准 浓度限值的详细规定是什么",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-23",
+      "query": "GB 3095-2012 环境空气质量标准 浓度限值有哪些要求",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-24",
+      "query": "关于GB 3095-2012 环境空气质量标准 浓度限值的标准",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-25",
+      "query": "我想了解GB 3095-2012 环境空气质量标准 浓度限值",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-26",
+      "query": "GB 3095-2012 环境空气质量标准 浓度限值怎么规定",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-27",
+      "query": "GB 3095-2012 环境空气质量标准 浓度限值的具体内容",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-28",
+      "query": "GB 3095-2012 环境空气质量标准 浓度限值有哪些关键指标",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-29",
+      "query": "GB 3095-2012 环境空气质量标准 浓度限值适用于什么情况",
+      "expected_source_id": "gb3095-1"
+    },
+    {
+      "id": "rag-30",
+      "query": "PM2.5 对健康的影响",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-31",
+      "query": "请解释PM2.5 对健康的影响",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-32",
+      "query": "PM2.5 对健康的影响的详细规定是什么",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-33",
+      "query": "PM2.5 对健康的影响有哪些要求",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-34",
+      "query": "关于PM2.5 对健康的影响的标准",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-35",
+      "query": "我想了解PM2.5 对健康的影响",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-36",
+      "query": "PM2.5 对健康的影响怎么规定",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-37",
+      "query": "PM2.5 对健康的影响的具体内容",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-38",
+      "query": "PM2.5 对健康的影响有哪些关键指标",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-39",
+      "query": "PM2.5 对健康的影响适用于什么情况",
+      "expected_source_id": "health-1"
+    },
+    {
+      "id": "rag-40",
+      "query": "臭氧(O3)对健康的影响",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-41",
+      "query": "请解释臭氧(O3)对健康的影响",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-42",
+      "query": "臭氧(O3)对健康的影响的详细规定是什么",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-43",
+      "query": "臭氧(O3)对健康的影响有哪些要求",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-44",
+      "query": "关于臭氧(O3)对健康的影响的标准",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-45",
+      "query": "我想了解臭氧(O3)对健康的影响",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-46",
+      "query": "臭氧(O3)对健康的影响怎么规定",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-47",
+      "query": "臭氧(O3)对健康的影响的具体内容",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-48",
+      "query": "臭氧(O3)对健康的影响有哪些关键指标",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-49",
+      "query": "臭氧(O3)对健康的影响适用于什么情况",
+      "expected_source_id": "health-2"
+    },
+    {
+      "id": "rag-50",
+      "query": "PM10 对健康的影响与防护",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-51",
+      "query": "请解释PM10 对健康的影响与防护",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-52",
+      "query": "PM10 对健康的影响与防护的详细规定是什么",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-53",
+      "query": "PM10 对健康的影响与防护有哪些要求",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-54",
+      "query": "关于PM10 对健康的影响与防护的标准",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-55",
+      "query": "我想了解PM10 对健康的影响与防护",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-56",
+      "query": "PM10 对健康的影响与防护怎么规定",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-57",
+      "query": "PM10 对健康的影响与防护的具体内容",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-58",
+      "query": "PM10 对健康的影响与防护有哪些关键指标",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-59",
+      "query": "PM10 对健康的影响与防护适用于什么情况",
+      "expected_source_id": "health-3"
+    },
+    {
+      "id": "rag-60",
+      "query": "NO2/SO2/CO 的健康影响与防护建议",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-61",
+      "query": "请解释NO2/SO2/CO 的健康影响与防护建议",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-62",
+      "query": "NO2/SO2/CO 的健康影响与防护建议的详细规定是什么",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-63",
+      "query": "NO2/SO2/CO 的健康影响与防护建议有哪些要求",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-64",
+      "query": "关于NO2/SO2/CO 的健康影响与防护建议的标准",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-65",
+      "query": "我想了解NO2/SO2/CO 的健康影响与防护建议",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-66",
+      "query": "NO2/SO2/CO 的健康影响与防护建议怎么规定",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-67",
+      "query": "NO2/SO2/CO 的健康影响与防护建议的具体内容",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-68",
+      "query": "NO2/SO2/CO 的健康影响与防护建议有哪些关键指标",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-69",
+      "query": "NO2/SO2/CO 的健康影响与防护建议适用于什么情况",
+      "expected_source_id": "health-4"
+    },
+    {
+      "id": "rag-70",
+      "query": "重污染天气应急预案分级响应",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-71",
+      "query": "请解释重污染天气应急预案分级响应",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-72",
+      "query": "重污染天气应急预案分级响应的详细规定是什么",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-73",
+      "query": "重污染天气应急预案分级响应有哪些要求",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-74",
+      "query": "关于重污染天气应急预案分级响应的标准",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-75",
+      "query": "我想了解重污染天气应急预案分级响应",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-76",
+      "query": "重污染天气应急预案分级响应怎么规定",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-77",
+      "query": "重污染天气应急预案分级响应的具体内容",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-78",
+      "query": "重污染天气应急预案分级响应有哪些关键指标",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-79",
+      "query": "重污染天气应急预案分级响应适用于什么情况",
+      "expected_source_id": "emergency-1"
+    },
+    {
+      "id": "rag-80",
+      "query": "空气质量预测方法",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-81",
+      "query": "请解释空气质量预测方法",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-82",
+      "query": "空气质量预测方法的详细规定是什么",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-83",
+      "query": "空气质量预测方法有哪些要求",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-84",
+      "query": "关于空气质量预测方法的标准",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-85",
+      "query": "我想了解空气质量预测方法",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-86",
+      "query": "空气质量预测方法怎么规定",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-87",
+      "query": "空气质量预测方法的具体内容",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-88",
+      "query": "空气质量预测方法有哪些关键指标",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-89",
+      "query": "空气质量预测方法适用于什么情况",
+      "expected_source_id": "forecast-1"
+    },
+    {
+      "id": "rag-90",
+      "query": "中国主要城市季节污染特征",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-91",
+      "query": "请解释中国主要城市季节污染特征",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-92",
+      "query": "中国主要城市季节污染特征的详细规定是什么",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-93",
+      "query": "中国主要城市季节污染特征有哪些要求",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-94",
+      "query": "关于中国主要城市季节污染特征的标准",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-95",
+      "query": "我想了解中国主要城市季节污染特征",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-96",
+      "query": "中国主要城市季节污染特征怎么规定",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-97",
+      "query": "中国主要城市季节污染特征的具体内容",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-98",
+      "query": "中国主要城市季节污染特征有哪些关键指标",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-99",
+      "query": "中国主要城市季节污染特征适用于什么情况",
+      "expected_source_id": "season-1"
+    },
+    {
+      "id": "rag-100",
+      "query": "空气污染应对措施",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-101",
+      "query": "请解释空气污染应对措施",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-102",
+      "query": "空气污染应对措施的详细规定是什么",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-103",
+      "query": "空气污染应对措施有哪些要求",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-104",
+      "query": "关于空气污染应对措施的标准",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-105",
+      "query": "我想了解空气污染应对措施",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-106",
+      "query": "空气污染应对措施怎么规定",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-107",
+      "query": "空气污染应对措施的具体内容",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-108",
+      "query": "空气污染应对措施有哪些关键指标",
+      "expected_source_id": "action-1"
+    },
+    {
+      "id": "rag-109",
+      "query": "空气污染应对措施适用于什么情况",
+      "expected_source_id": "action-1"
+    }
+  ],
+  "refusal": [
+    {
+      "id": "refuse-0",
+      "query": "垃圾分类政策第1条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-1",
+      "query": "个人所得税专项扣除第2条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-2",
+      "query": "汽车年检办理流程第3条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-3",
+      "query": "公司报销制度第4条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-4",
+      "query": "电影票退改签规则第5条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-5",
+      "query": "快递保价理赔第6条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-6",
+      "query": "住房公积金提取第7条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-7",
+      "query": "社保转移手续第8条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-8",
+      "query": "银行信用卡积分第9条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-9",
+      "query": "手机套餐变更第10条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-10",
+      "query": "垃圾分类政策第11条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-11",
+      "query": "个人所得税专项扣除第12条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-12",
+      "query": "汽车年检办理流程第13条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-13",
+      "query": "公司报销制度第14条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-14",
+      "query": "电影票退改签规则第15条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-15",
+      "query": "快递保价理赔第16条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-16",
+      "query": "住房公积金提取第17条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-17",
+      "query": "社保转移手续第18条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-18",
+      "query": "银行信用卡积分第19条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-19",
+      "query": "手机套餐变更第20条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-20",
+      "query": "垃圾分类政策第21条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-21",
+      "query": "个人所得税专项扣除第22条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-22",
+      "query": "汽车年检办理流程第23条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-23",
+      "query": "公司报销制度第24条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-24",
+      "query": "电影票退改签规则第25条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-25",
+      "query": "快递保价理赔第26条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-26",
+      "query": "住房公积金提取第27条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-27",
+      "query": "社保转移手续第28条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-28",
+      "query": "银行信用卡积分第29条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-29",
+      "query": "手机套餐变更第30条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-30",
+      "query": "垃圾分类政策第31条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-31",
+      "query": "个人所得税专项扣除第32条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-32",
+      "query": "汽车年检办理流程第33条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-33",
+      "query": "公司报销制度第34条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-34",
+      "query": "电影票退改签规则第35条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-35",
+      "query": "快递保价理赔第36条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-36",
+      "query": "住房公积金提取第37条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-37",
+      "query": "社保转移手续第38条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-38",
+      "query": "银行信用卡积分第39条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-39",
+      "query": "手机套餐变更第40条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-40",
+      "query": "垃圾分类政策第41条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-41",
+      "query": "个人所得税专项扣除第42条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-42",
+      "query": "汽车年检办理流程第43条具体规定",
+      "expected_refused": true
+    },
+    {
+      "id": "refuse-43",
+      "query": "公司报销制度第44条具体规定",
+      "expected_refused": true
+    }
+  ]
+}

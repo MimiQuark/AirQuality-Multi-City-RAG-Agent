@@ -1,0 +1,53 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: air-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: python scripts/record_checks.py --coverage-fail-under 70
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: air-quality-reports
+          path: reports
+          retention-days: 30
+
+  rag-real-embedding:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e ".[dev,rag,mlops]"
+      - name: Cache Hugging Face model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: bge-small-zh-v1.5
+      - run: USE_REAL_EMBEDDINGS=1 python -m backend.evaluation.eval_rag
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: air-real-rag-eval
+          path: reports/rag_eval
+          retention-days: 30

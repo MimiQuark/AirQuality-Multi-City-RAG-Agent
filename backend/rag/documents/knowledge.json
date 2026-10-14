@@ -1,0 +1,194 @@
+[
+  {
+    "id": "hj633-1",
+    "category": "标准",
+    "title": "HJ 633-2012 环境空气质量指数(AQI)技术规定",
+    "content": "AQI 分级标准：0-50优，51-100良，101-150轻度污染，151-200中度污染，201-300重度污染，>300严重污染。\nPM2.5 24小时均值二级标准：75μg/m³。PM10：150μg/m³。O3：160μg/m³。NO2：80μg/m³。",
+    "keywords": [
+      "AQI",
+      "标准",
+      "分级",
+      "HJ633",
+      "空气质量指数"
+    ],
+    "source_url": "https://www.mee.gov.cn/",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "hj633-2",
+    "category": "标准",
+    "title": "HJ 633-2012 首要污染物与 IAQI 计算方法",
+    "content": "各污染物的空气质量分指数(IAQI)按分段线性插值计算，AQI 取各污染物 IAQI 最大值。\n当 AQI 大于 50 时，IAQI 最大的污染物为首要污染物；IAQI 并列最大时并列为首要污染物。",
+    "keywords": [
+      "IAQI",
+      "首要污染物",
+      "AQI",
+      "计算",
+      "HJ633",
+      "分指数"
+    ],
+    "source_url": "https://www.mee.gov.cn/",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "gb3095-1",
+    "category": "标准",
+    "title": "GB 3095-2012 环境空气质量标准 浓度限值",
+    "content": "环境空气污染物基本项目浓度限值（二级/24小时均值）：\nPM2.5 75μg/m³（一级35），PM10 150μg/m³（一级50），SO2 150μg/m³（一级50），\nNO2 80μg/m³（一级40），CO 4mg/m³，O3 日最大8小时均值 160μg/m³（一级100）。\n二类区（居住区、商业交通居民混合区等）执行二级标准。",
+    "keywords": [
+      "GB3095",
+      "限值",
+      "浓度",
+      "标准",
+      "二级",
+      "一级",
+      "PM2.5",
+      "PM10"
+    ],
+    "source_url": "https://www.mee.gov.cn/",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "health-1",
+    "category": "健康",
+    "title": "PM2.5 对健康的影响",
+    "content": "PM2.5 可深入肺泡，进入血液循环，长期暴露增加心血管疾病和呼吸系统疾病风险。\n敏感人群（儿童、老人、心肺疾病患者）应减少户外活动。AQI>100时建议佩戴口罩。",
+    "keywords": [
+      "PM2.5",
+      "健康",
+      "影响",
+      "危害",
+      "疾病",
+      "口罩"
+    ],
+    "source_url": "https://www.who.int/health-topics/air-pollution",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "health-2",
+    "category": "健康",
+    "title": "臭氧(O3)对健康的影响",
+    "content": "地面臭氧刺激呼吸道，引起咳嗽、胸闷，加重哮喘。夏季午后浓度最高。\n建议敏感人群避免在午后高温时段进行户外运动。",
+    "keywords": [
+      "臭氧",
+      "O3",
+      "健康",
+      "哮喘",
+      "呼吸道",
+      "夏季"
+    ],
+    "source_url": "https://www.who.int/health-topics/air-pollution",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "health-3",
+    "category": "健康",
+    "title": "PM10 对健康的影响与防护",
+    "content": "PM10（可吸入颗粒物）可沉积在上呼吸道，引发咳嗽、咽炎，加重慢性阻塞性肺病。\n沙尘天气是 PM10 短时飙升的主要原因，外出建议佩戴防尘口罩，回家后清洗面部和鼻腔。",
+    "keywords": [
+      "PM10",
+      "可吸入颗粒物",
+      "健康",
+      "沙尘",
+      "防护",
+      "口罩"
+    ],
+    "source_url": "https://www.who.int/health-topics/air-pollution",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "health-4",
+    "category": "健康",
+    "title": "NO2/SO2/CO 的健康影响与防护建议",
+    "content": "NO2 刺激呼吸道，长期暴露降低肺功能，交通干道附近浓度偏高；\nSO2 诱发支气管痉挛，哮喘患者尤为敏感；CO 与血红蛋白结合造成缺氧，高浓度可致命。\n防护建议：污染时段减少户外停留，远离交通主干道，室内注意通风与净化。",
+    "keywords": [
+      "NO2",
+      "SO2",
+      "CO",
+      "二氧化氮",
+      "二氧化硫",
+      "一氧化碳",
+      "健康",
+      "防护"
+    ],
+    "source_url": "https://www.who.int/health-topics/air-pollution",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "emergency-1",
+    "category": "应急",
+    "title": "重污染天气应急预案分级响应",
+    "content": "重污染天气预警由轻到重分为黄色、橙色、红色三级：\n黄色预警（预测重度污染持续2天）启动III级响应，建议性减排+健康防护提示；\n橙色预警（预测重度污染持续3天）启动II级响应，工业企业限产停产、停止土石方作业；\n红色预警（预测严重污染持续3天）启动I级响应，机动车单双号限行、中小学停课。",
+    "keywords": [
+      "重污染",
+      "应急",
+      "预案",
+      "预警",
+      "分级",
+      "响应",
+      "限行",
+      "停课"
+    ],
+    "source_url": "https://www.mee.gov.cn/",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "forecast-1",
+    "category": "预测",
+    "title": "空气质量预测方法",
+    "content": "本系统使用随机森林模型进行预测，特征包括：其他污染物浓度、温度、湿度、风速、\n时刻、月份、目标污染物滞后1h/24h与6h滚动均值。预测精度 R² 0.92-0.98。",
+    "keywords": [
+      "预测",
+      "模型",
+      "随机森林",
+      "方法",
+      "精度"
+    ],
+    "source_url": "https://www.mee.gov.cn/",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "season-1",
+    "category": "季节",
+    "title": "中国主要城市季节污染特征",
+    "content": "北方城市冬季PM2.5污染最重（供暖+静稳天气），夏季最轻。\n南方城市夏季臭氧污染突出（高温+强光照）。春秋季受沙尘和秸秆焚烧影响。",
+    "keywords": [
+      "季节",
+      "冬季",
+      "夏季",
+      "污染",
+      "特征",
+      "供暖",
+      "臭氧"
+    ],
+    "source_url": "https://www.mee.gov.cn/",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  },
+  {
+    "id": "action-1",
+    "category": "应对",
+    "title": "空气污染应对措施",
+    "content": "轻度污染：减少户外运动，关闭门窗。中度污染：佩戴N95口罩，开启空气净化器。\n重度污染：避免外出，儿童老人留室内。严重污染：停止一切户外活动，学校停课。",
+    "keywords": [
+      "应对",
+      "措施",
+      "口罩",
+      "空气净化器",
+      "停课",
+      "建议"
+    ],
+    "source_url": "https://www.mee.gov.cn/",
+    "version": "2026-curated-1",
+    "updated_at": "2026-10-07"
+  }
+]
