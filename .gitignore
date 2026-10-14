@@ -9,6 +9,12 @@ htmlcov/
 .venv/
 venv/
 
+# 密钥与本地配置：绝不能提交
+.env
+.env.*
+*.env
+!.env.example
+
 # Local runtime state
 *.log
 _reg.log
