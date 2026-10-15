@@ -28,3 +28,6 @@ data/trace.db
 backend/models/*.pkl
 backend/backend/models/*.pkl
 *.7z
+
+# 启动器本地配置（可能含 API Key）
+.launcher_config.json
