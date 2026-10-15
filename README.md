@@ -2,6 +2,13 @@
 
 基于 FastAPI、LangGraph、Function Calling 与混合 RAG 的多城市空气质量分析与预警 Agent。系统在没有 LLM Key 时自动降级为可重复的规则 Agent，适合本地演示和自动化评测。
 
+<p align="center">
+  <img src="docs/screenshot.png" width="880" alt="界面截图">
+</p>
+
+> 数据仪表盘：六城市切换、实时空气质量、月度趋势、AQI 等级分布与季节对比
+
+
 ## 能力
 
 - 10 个领域工具：实时/历史数据、24 小时预测、城市对比、季节、相关性、预警、模型训练与政策检索。
