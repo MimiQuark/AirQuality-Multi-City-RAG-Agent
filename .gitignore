@@ -35,3 +35,5 @@ backend/backend/models/*.pkl
 
 # 启动器本地配置（可能含 API Key）
 .launcher_config.json
+
+backend/models/*_meta.json
