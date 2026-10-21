@@ -153,7 +153,11 @@ def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[
     fake_ids = [i for i in cited_ids if i not in kb_ids]
     fake_standards = [s for s in cited_standards if s not in kb_standards]
     fake_clauses = [c for c in cited_clauses if c not in kb_clauses]
-    if case.category == "policy" and case.expected_citation_ids:
+    cited_anything = bool(cited_ids or cited_standards or cited_clauses)
+    citation_applicable = case.category == "policy" or cited_anything
+    if not citation_applicable:
+        citation_ok = None
+    elif case.category == "policy" and case.expected_citation_ids:
         citation_ok = bool(set(valid_ids) & set(case.expected_citation_ids)) and not (
             fake_ids or fake_standards or fake_clauses
         )
@@ -170,16 +174,20 @@ def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[
         structured_ok = not structured_fake
 
     refused = bool(result.get("refused"))
-    refusal_ok = (refused == case.should_refuse)
+    if case.should_refuse:
+        # OOD 必须拒答，且不得带任何引用。
+        refusal_ok = refused and not cited_anything
+    else:
+        refusal_ok = not refused
     # 拒答—引用一致性：检出 refused 时不得引用条款
-    consistency_ok = not (refused and (cited_ids or cited_standards))
+    consistency_ok = not (refused and cited_anything)
 
     return {
         "id": case.id, "category": case.category, "question": case.question,
         "expected_tools": case.expected_tools, "actual_tools": actual_tools,
         "answer_excerpt": answer[:160],
         "routing_ok": routing_ok, "facts_ok": facts_ok, "citation_ok": citation_ok,
-        "refusal_ok": refusal_ok, "consistency_ok": consistency_ok,
+        "refusal_ok": refusal_ok, "consistency_ok": consistency_ok, "refused": refused,
         "cited_ids": cited_ids, "hallucinated_ids": fake_ids,
         "cited_standards": cited_standards, "cited_clauses": cited_clauses,
         "hallucinated_standards": fake_standards, "hallucinated_clauses": fake_clauses,
@@ -193,6 +201,8 @@ def summarize(rows: list[dict]) -> dict:
     n = len(rows)
     routing_rows = [r for r in rows if r["routing_ok"] is not None]
     fact_rows = [r for r in rows if r["facts_ok"] is not None]
+    citation_rows = [r for r in rows if r["citation_ok"] is not None]
+    ood_rows = [r for r in rows if r["category"] == "ood"]
     halluc = sum(len(r["hallucinated_ids"]) + len(r["hallucinated_standards"])
                  + len(r["hallucinated_clauses"]) for r in rows)
     # 分母与分子同口径：文本里出现的 id / 标准号 / 条款编号三类引用都计入
@@ -210,8 +220,18 @@ def summarize(rows: list[dict]) -> dict:
             sum(bool(r["facts_ok"]) for r in fact_rows) / len(fact_rows)
             if fact_rows else None
         ),
-        "citation_correctness": sum(r["citation_ok"] for r in rows) / n,
+        "citation_applicable_cases": len(citation_rows),
+        "citation_correctness": (
+            sum(bool(r["citation_ok"]) for r in citation_rows) / len(citation_rows)
+            if citation_rows else None
+        ),
         "refusal_compliance": sum(r["refusal_ok"] for r in rows) / n,
+        "ood_cases": len(ood_rows),
+        "ood_refused": sum(bool(r["refused"]) for r in ood_rows),
+        "ood_refusal_rate": (
+            sum(bool(r["refused"]) for r in ood_rows) / len(ood_rows)
+            if ood_rows else None
+        ),
         "refusal_citation_consistency": sum(r["consistency_ok"] for r in rows) / n,
         "hallucinated_citations": halluc,
         "hallucinated_clauses": sum(len(r["hallucinated_clauses"]) for r in rows),
@@ -259,8 +279,11 @@ def main() -> int:
               f"  (分母 {m['routing_applicable_cases']})")
         print(f"  事实要点覆盖率        {_fmt(m['fact_coverage'])}"
               f"  (分母 {m['fact_applicable_cases']})")
-        print(f"  引用正确率            {_fmt(m['citation_correctness'])}")
-        print(f"  拒答合规率            {m['refusal_compliance']:.3f}")
+        print(f"  引用正确率            {_fmt(m['citation_correctness'])}"
+              f"  (分母 {m['citation_applicable_cases']})")
+        print(f"  拒答合规率            {_fmt(m['refusal_compliance'])}")
+        print(f"  OOD 拒答率            {_fmt(m['ood_refusal_rate'])}"
+              f"  ({m['ood_refused']}/{m['ood_cases']})")
         print(f"  拒答—引用一致性       {m['refusal_citation_consistency']:.3f}")
         print(f"  幻觉引用数 / 总引用数  {m['hallucinated_citations']} / {m['cited_citations']}"
               f"   (其中编造条款编号 {m['hallucinated_clauses']} 处)")
@@ -270,7 +293,7 @@ def main() -> int:
             r["id"] for r in report["results"]
             if r["routing_ok"] is False
             or r["facts_ok"] is False
-            or not r["citation_ok"]
+            or r["citation_ok"] is False
             or not r["refusal_ok"]
         ]
         print(f"  未完全通过的用例: {', '.join(failed) if failed else '无'}")
@@ -293,8 +316,9 @@ def main() -> int:
             f"| 用例数 | {m['cases']} |",
             f"| 工具路由正确率 | {_fmt(m['tool_routing_accuracy'])} (分母 {m['routing_applicable_cases']}) |",
             f"| 事实要点覆盖率 | {_fmt(m['fact_coverage'])} (分母 {m['fact_applicable_cases']}) |",
-            f"| 引用正确率 | {_fmt(m['citation_correctness'])} |",
-            f"| 拒答合规率 | {m['refusal_compliance']:.3f} |",
+            f"| 引用正确率 | {_fmt(m['citation_correctness'])} (分母 {m['citation_applicable_cases']}) |",
+            f"| 拒答合规率 | {_fmt(m['refusal_compliance'])} |",
+            f"| OOD 拒答率 | {_fmt(m['ood_refusal_rate'])} ({m['ood_refused']}/{m['ood_cases']}) |",
             f"| 拒答—引用一致性 | {m['refusal_citation_consistency']:.3f} |",
             f"| 幻觉引用数 / 总引用数 | {m['hallucinated_citations']} / {m['cited_citations']} |",
             f"| └ 其中编造条款编号 | {m['hallucinated_clauses']} |",

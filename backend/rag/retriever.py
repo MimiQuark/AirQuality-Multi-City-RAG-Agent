@@ -4,27 +4,16 @@ from __future__ import annotations
 from typing import Any
 
 from backend.config import settings
-from backend.rag import HybridRagService, create_embedding_provider, load_documents
+
+from .runtime import get_service
 
 # 注意：这是 HybridRagService 的**相对**分下限（保留 cos >= MIN_SCORE × 最高 cos 的分块），
 # 不是 0-1 的绝对分数，也不是拒答阈值。拒答阈值请用 get_refusal_threshold()。
 MIN_SCORE = settings.rag_min_score
-_service: HybridRagService | None = None
 
 
-def _get_service() -> HybridRagService:
-    global _service
-    if _service is None:
-        _service = HybridRagService(
-            create_embedding_provider(settings.embedding_model, settings.use_real_embeddings),
-            chunk_size=settings.rag_chunk_size,
-            chunk_overlap=settings.rag_chunk_overlap,
-            chunk_strategy=settings.rag_chunk_strategy,
-            min_score=MIN_SCORE,
-            refusal_threshold=settings.rag_refusal_threshold,
-        )
-        _service.index(load_documents())
-    return _service
+def _get_service():
+    return get_service()
 
 
 def get_refusal_threshold() -> float:

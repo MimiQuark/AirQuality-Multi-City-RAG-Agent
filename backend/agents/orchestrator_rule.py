@@ -4,7 +4,18 @@ Rule-based Orchestrator - 无需 LLM API 的 Agent 意图识别
 """
 import re
 from typing import Dict, List, Any
-from backend.tools.implementations import execute_tool_calls_sync
+from backend.tools.implementations import execute_tool_calls_sync, is_environment_query
+
+DOMAIN_HINTS = (
+    "城市", "排名", "对比", "比较", "哪个", "季节", "相关", "告警", "预警",
+    "超标", "预测", "预报", "实时", "数据来源", "模型", "算法", "原理",
+    "训练", "功能", "能做什么", "你是谁", "介绍", "帮助", "help",
+)
+
+
+def _in_domain(text: str) -> bool:
+    lower = text.lower()
+    return is_environment_query(text) or any(hint in lower for hint in DOMAIN_HINTS)
 
 # 城市名映射
 CITY_MAP = {
@@ -52,7 +63,12 @@ def rule_based_plan(text: str, default_city: str = "beijing") -> List[Dict[str, 
     text_lower = text.lower()
     city = extract_city(text, default_city)
     pollutant = extract_pollutant(text, "PM25")
-    
+
+    # 0. 领域门禁：明显不属于环保/数据问答的问题直接走政策检索，
+    #    由 query_policy 返回 refused，避免规则兜底用天气数据硬答。
+    if not _in_domain(text):
+        return [{"tool": "query_policy", "params": {"query": text}}]
+
     # 1. 城市对比
     cities_in_text = [alias for alias in CITY_MAP if alias in text_lower]
     if (
@@ -132,8 +148,13 @@ def rule_based_synthesize(question: str, tool_results: List[Dict], city: str | N
         tool_name = r["tool"]
         result = r["result"]
         
-        if "error" in result:
-            parts.append(f"【{tool_name}】查询出错: {result['error']}")
+        error_text = None
+        if isinstance(result, dict) and "error" in result:
+            error_text = result["error"]
+        elif isinstance(result, list) and result and isinstance(result[0], dict) and "error" in result[0]:
+            error_text = result[0]["error"]
+        if error_text is not None:
+            parts.append(f"【{tool_name}】查询出错: {error_text}")
             continue
 
         if tool_name == "query_policy":

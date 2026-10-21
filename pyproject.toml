@@ -30,7 +30,7 @@ dev = ["pytest>=8,<9", "pytest-cov>=6,<8", "httpx>=0.27,<1", "ruff>=0.8,<1", "my
 include = ["backend*"]
 
 [tool.setuptools.package-data]
-backend = ["rag/documents/*.json", "data/*.csv"]
+backend = ["rag/documents/*.json", "data/*.csv", "evaluation/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

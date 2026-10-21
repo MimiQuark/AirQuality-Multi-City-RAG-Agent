@@ -1,3 +1,4 @@
+import json
 import os
 import joblib
 import numpy as np
@@ -264,6 +265,10 @@ def _features_path(target, city):
     return os.path.join(MODEL_DIR, f"{city}_{target.lower()}_features.pkl")
 
 
+def _meta_path(target, city):
+    return os.path.join(MODEL_DIR, f"{city}_{target.lower()}_meta.json")
+
+
 def train_model(df, target="PM25", city=DEFAULT_CITY):
     """
     训练单城市单污染物预测模型。
@@ -296,6 +301,8 @@ def train_model(df, target="PM25", city=DEFAULT_CITY):
     model.fit(d[features].values, d[target].values)
     joblib.dump(model, _model_path(target, city))
     joblib.dump(features, _features_path(target, city))
+    with open(_meta_path(target, city), "w", encoding="utf-8") as handle:
+        json.dump({"version": 2, "features": features}, handle, ensure_ascii=False)
     return {
         "metrics": {**metrics, "training_rows": len(d), "refit": "full-series"},
         "importance": importance,
@@ -308,10 +315,24 @@ def train_all(df, city=DEFAULT_CITY):
 
 
 def load_model(target="PM25", city=DEFAULT_CITY):
-    if not os.path.exists(_model_path(target, city)):
+    expected = get_features(target)
+    valid = False
+    if os.path.exists(_model_path(target, city)) and os.path.exists(_features_path(target, city)) and os.path.exists(_meta_path(target, city)):
+        try:
+            with open(_meta_path(target, city), encoding="utf-8") as handle:
+                meta = json.load(handle)
+            valid = meta.get("version") == 2 and meta.get("features") == expected
+        except Exception:
+            valid = False
+    if not valid:
         df = preprocess(load_data())
         train_model(df, target, city)
-    return joblib.load(_model_path(target, city)), joblib.load(_features_path(target, city))
+    features = joblib.load(_features_path(target, city))
+    if features != expected:
+        df = preprocess(load_data())
+        train_model(df, target, city)
+        features = joblib.load(_features_path(target, city))
+    return joblib.load(_model_path(target, city)), features
 
 
 def predict_single(data: dict, target="PM25", city=DEFAULT_CITY):
@@ -431,9 +452,15 @@ def evaluate_forecast_24h(df, target="PM25", city=DEFAULT_CITY, step=24):
     按"未来 24h 内是否出现超标"的二分类事件统计召回率 / 精确率。
     """
     threshold = THRESHOLDS[target]
-    model, features = load_model(target, city)
+    features = get_features(target)
     full = get_city_df(df, city)
     split = int(len(full) * 0.8)
+    # Use an evaluation-only model fitted on the first 80%; the saved model is
+    # refit on 100% for production and would make held-out scoring in-sample.
+    model = RandomForestRegressor(
+        n_estimators=50, max_depth=10, random_state=42, n_jobs=-1
+    )
+    model.fit(full.iloc[:split][features].values, full.iloc[:split][target].values)
     start = split
     origins = [o for o in range(start, len(full) - 24, step) if o >= 24]
     if not origins:
@@ -625,7 +652,7 @@ def answer_question(question: str, city=DEFAULT_CITY) -> str:
                 "  - 按城市分别训练随机森林回归模型, 预测 PM2.5/PM10/O3/NO2, 时间序列 80/20 划分\n"
                 "  - 特征: 其他污染物 + 温湿度/风速 + 时刻/月份 + 目标滞后1h/24h 与 6h 滚动均值\n"
                 "    （预测 PM2.5 时剔除 PM10, 避免整体-部分伪相关）\n"
-                "  - 效果: 各城市 R² 0.92~0.98; 预警全年回测北京召回 76.7%、精确率 96.6%")
+                "  - 指标以离线评估脚本的输出为准；训练按时间序列 80/20 评估，保存前在全量数据上重训")
     if any(w in q for w in ["功能", "能做什么", "介绍", "你是谁", "帮助", "help", "用法"]):
         return ("我是环境监测 AI 助手, 可以:\n"
                 "  - 查询某城市实时/当前空气质量（如'上海现在空气怎么样'）\n"

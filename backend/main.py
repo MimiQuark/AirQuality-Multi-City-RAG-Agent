@@ -45,7 +45,7 @@ from backend.tools.implementations import get_tool_descriptions
 from backend import trace as trace_store
 from backend.config import settings as app_settings
 from backend.feedback import record_feedback
-from backend.rag import HybridRagService, create_embedding_provider, load_documents
+from backend.rag import HybridRagService
 from backend.report import generate_daily_report, DailyReportScheduler
 
 # ============================================================
@@ -85,26 +85,10 @@ if os.path.exists(STATIC_DIR):
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 _df_cache = None
-_rag_service: Optional[HybridRagService] = None
-
-
 def get_rag_service() -> HybridRagService:
-    global _rag_service
-    if _rag_service is None:
-        embedding = create_embedding_provider(
-            app_settings.embedding_model, app_settings.use_real_embeddings
-        )
-        _rag_service = HybridRagService(
-            embedding,
-            chunk_size=app_settings.rag_chunk_size,
-            chunk_overlap=app_settings.rag_chunk_overlap,
-            top_k=app_settings.rag_top_k,
-            chunk_strategy=app_settings.rag_chunk_strategy,
-            min_score=app_settings.rag_min_score,
-            refusal_threshold=app_settings.rag_refusal_threshold,
-        )
-        _rag_service.index(load_documents())
-    return _rag_service
+    from backend.rag import runtime
+
+    return runtime.get_service()
 
 def get_df():
     global _df_cache
@@ -292,8 +276,10 @@ def api_report_daily_generate(
     x_admin_token: Optional[str] = Header(None),
 ):
     """强制重新生成日报（覆盖当天已有文件）"""
-    if app_settings.admin_api_token and x_admin_token != app_settings.admin_api_token:
-        raise HTTPException(403, "admin token required")
+    if not app_settings.admin_api_token:
+        raise HTTPException(404, "日报生成未启用：请配置 ADMIN_API_TOKEN")
+    if x_admin_token != app_settings.admin_api_token:
+        raise HTTPException(403, "admin token 无效")
     try:
         return generate_daily_report(date, force=True)
     except ValueError as exc:
@@ -571,7 +557,9 @@ def rag_reindex(x_admin_token: str | None = Header(default=None)):
         raise HTTPException(404, "RAG 管理接口未启用")
     if x_admin_token != app_settings.admin_api_token:
         raise HTTPException(403, "管理令牌无效")
-    return get_rag_service().index(load_documents())
+    from backend.rag import runtime
+
+    return runtime.reindex()
 
 
 @app.post("/api/feedback")

@@ -202,6 +202,19 @@ def tool_get_realtime(city: str = "beijing") -> Dict[str, Any]:
         return {"error": str(e)}
 
 
+ENV_DOMAIN_TERMS = (
+    "空气", "大气", "污染", "排放", "环境", "环保", "雾霾", "扬尘", "废气",
+    "pm2.5", "pm25", "pm10", "臭氧", "二氧化硫", "so2", "二氧化氮", "no2",
+    "一氧化碳", "co", "氮氧化物", "aqi", "碳中和", "碳排放", "气候", "气象",
+    "监测", "健康风险",
+)
+
+
+def is_environment_query(query: str) -> bool:
+    text = (query or "").lower()
+    return any(term.lower() in text for term in ENV_DOMAIN_TERMS)
+
+
 def tool_query_policy(query: str) -> Dict[str, Any]:
     """
     检索环保标准/政策/健康知识库（RAG）
@@ -211,6 +224,12 @@ def tool_query_policy(query: str) -> Dict[str, Any]:
     - 低置信：返回 {"refused": true, "reason": ...}，上层必须明说未检索到，禁止编造条款编号
     """
     try:
+        if not is_environment_query(query):
+            return {
+                "refused": True,
+                "reason": "问题不在环保标准知识库范围内，为避免编造条款，本工具拒绝回答。",
+                "results": [],
+            }
         from backend.rag import retriever
         detail = retriever.retrieve_detailed(query, top_k=3)
         if detail["low_confidence"]:

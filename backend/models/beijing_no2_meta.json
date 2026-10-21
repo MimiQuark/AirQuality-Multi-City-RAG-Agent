@@ -1,0 +1,1 @@
+{"version": 2, "features": ["PM25", "PM10", "SO2", "CO", "O3", "temperature", "humidity", "wind_speed", "hour", "month", "NO2_lag1h", "NO2_lag24h", "NO2_roll6h"]}
