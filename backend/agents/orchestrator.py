@@ -379,12 +379,23 @@ def run_agent(question: str, city: str = "beijing", history: List[Dict] = None) 
     try:
         return run_coroutine(run_agent_async(question, city, history))
     except Exception as e:
-        return {
-            "answer": f"Agent 执行出错: {str(e)}",
-            "tool_calls": [],
-            "tool_results": [],
-            "city": city,
-            "references": [],
-            "refused": False,
-            "usage": {"prompt_tokens": None, "completion_tokens": None},
-        }
+        # Do not return an error string as a 200 answer: fall back to the
+        # deterministic rule agent, which is always available offline.
+        try:
+            from backend.agents.orchestrator_rule import run_agent_rule_based
+
+            result = run_agent_rule_based(question, city)
+            result["mode"] = "rule-fallback"
+            result["agent_error"] = f"{type(e).__name__}: {e}"
+            return result
+        except Exception as fallback_error:
+            return {
+                "answer": f"Agent 执行出错: {e}; 规则降级也失败: {fallback_error}",
+                "tool_calls": [],
+                "tool_results": [],
+                "city": city,
+                "references": [],
+                "refused": False,
+                "usage": {"prompt_tokens": None, "completion_tokens": None},
+                "mode": "error",
+            }

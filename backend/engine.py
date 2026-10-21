@@ -85,9 +85,13 @@ def add_features(df):
     for city in df["city"].unique():
         mask = df["city"] == city
         for target in POLLUTANTS:
-            df.loc[mask, f"{target}_lag1h"] = df.loc[mask, target].shift(1)
-            df.loc[mask, f"{target}_lag24h"] = df.loc[mask, target].shift(24)
-            df.loc[mask, f"{target}_roll6h"] = df.loc[mask, target].rolling(6, min_periods=1).mean()
+            series = df.loc[mask, target]
+            df.loc[mask, f"{target}_lag1h"] = series.shift(1)
+            df.loc[mask, f"{target}_lag24h"] = series.shift(24)
+            # Shift before rolling: row t must not see target[t].
+            df.loc[mask, f"{target}_roll6h"] = (
+                series.shift(1).rolling(6, min_periods=1).mean()
+            )
     df = df.dropna(subset=[f"{t}_lag1h" for t in POLLUTANTS] + [f"{t}_lag24h" for t in POLLUTANTS])
     return df
 
@@ -287,9 +291,15 @@ def train_model(df, target="PM25", city=DEFAULT_CITY):
         "feature": features,
         "importance": model.feature_importances_
     }).sort_values("importance", ascending=False).to_dict(orient="records")
+    # Refit on the full series after evaluation so production inference uses
+    # the latest data, while the reported metrics remain the held-out metrics.
+    model.fit(d[features].values, d[target].values)
     joblib.dump(model, _model_path(target, city))
     joblib.dump(features, _features_path(target, city))
-    return {"metrics": metrics, "importance": importance}
+    return {
+        "metrics": {**metrics, "training_rows": len(d), "refit": "full-series"},
+        "importance": importance,
+    }
 
 
 def train_all(df, city=DEFAULT_CITY):

@@ -1,6 +1,13 @@
-# 多城市空气质量智能问答与预警 Agent
+# AirQuality Multi-City RAG Agent
 
-基于 FastAPI、LangGraph、Function Calling 与混合 RAG 的多城市空气质量分析与预警 Agent。系统在没有 LLM Key 时自动降级为可重复的规则 Agent，适合本地演示和自动化评测。
+[![CI](https://github.com/MimiQuark/AirQuality-Multi-City-RAG-Agent/actions/workflows/ci.yml/badge.svg)](https://github.com/MimiQuark/AirQuality-Multi-City-RAG-Agent/actions/workflows/ci.yml)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white)](https://github.com/MimiQuark/AirQuality-Multi-City-RAG-Agent)
+[![Python](https://img.shields.io/badge/Python-3.11--3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-Agent-1C3C3C?logo=langchain&logoColor=white)](https://langchain-ai.github.io/langgraph/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+多城市空气质量分析与预警 Agent：FastAPI + LangGraph 编排 10 个领域工具，结合混合检索、可校准拒答、规则降级、24 小时预测和评测集。没有 LLM Key 时自动使用确定性规则 Agent，适合本地演示和自动化回归。
 
 <p align="center">
   <img src="docs/screenshot.png" width="880" alt="界面截图">
@@ -8,16 +15,37 @@
 
 > 数据仪表盘：六城市切换、实时空气质量、月度趋势、AQI 等级分布与季节对比
 
+## 架构
+
+```text
+FastAPI /api
+   ├── /api/chat/agent      LangGraph LLM 编排（无 Key 时规则 Agent）
+   ├── /api/chat            传统问答兼容
+   ├── /api/realtime        实时数据（WAQI，可选）
+   ├── /api/report/daily    每日日报（日期白名单 + 生成鉴权）
+   └── /api/rag/*           混合检索 / 重建索引
+
+agents/         LLM JSON 工具规划 + 规则 Agent + 综合回答
+tools/          10 个领域工具（实时、预测、对比、季节、相关性、告警、训练、政策）
+rag/            NumPy 内存混合检索 + 离线 hash / BGE Embedding + 拒答
+engine.py       数据加载、特征、模型、告警、季节/相关性
+evaluation/     RAG、工具路由、端到端基准
+```
 
 ## 能力
 
 - 10 个领域工具：实时/历史数据、24 小时预测、城市对比、季节、相关性、预警、模型训练与政策检索。
-- PostgreSQL + pgvector 与 pg_trgm 混合检索，支持 BGE 中文 Embedding 和确定性离线测试模型。
+- 混合检索：内存向量索引 + 词法召回；支持离线 hash Embedding 和可选 BGE 中文 Embedding。
+- **LLM JSON 工具规划**（不是原生 Function Calling）：模型输出 JSON 调用计划，由代码解析并执行；规则 Agent 是可离线回归的降级路径。
 - 引用来源、低置信度拒答、SQLite Trace、反馈收集和 60 条工具路由回归集。
-- 两套检索评测集：v1 简单集（110 条，题面照抄标题，仅作回归护栏）与 v2 困难集（66 条口语化提问，0% 含标题关键词）。
-- 平衡拒答集 48 条（24 条超纲应拒 + 24 条领域内应答），阈值经训练/留出拆分标定。
+- 两套检索评测集：v1 简单集（110 条，题面照抄标题，仅作回归护栏）与 v2 困难集（66 条口语化提问）。
+- 平衡拒答集 48 条（24 条超纲应拒 + 24 条领域内应答）。
 
-### 实测指标（v2 困难集 + BGE 语义模型 + 结构分块）
+## 评测结果（按口径阅读）
+
+### 检索 / 拒答
+
+**BGE 语义模型 + 结构分块，v2 困难集（历史手工运行）：**
 
 | 检索指标 | 数值 |
 |---|---:|
@@ -26,90 +54,87 @@
 | MRR | 0.862 |
 | 拒答准确率 | 0.896（应拒 0.958 / 应答 0.833） |
 
-同一套集上离线 hash 仅 Recall@1 0.500 / 拒答 0.562，差距即语义检索的价值。
+同一套集上离线 hash 的 CI 回归基线为 Recall@1 0.500 / Recall@5 0.848 / 拒答准确率 0.562；它不是线上能力，只用于防止回归。
 
-### 端到端评测（24 用例）：规则版 vs LLM 版
+> 评测边界：拒答阈值 0.53 是在 48 条拒答集**全量**上选择的，仓库没有实现训练/留出拆分；48 条拒答查询中有 21 条与 66 条检索查询重叠，拒答独立性有限。BGE 结果来自手工运行，CI 默认跑离线 hash。
 
-| 指标 | 规则版 | LLM 版（glm-4-flash） |
-|---|---:|---:|
-| 工具路由正确率 | 0.667 | **0.917** |
-| 事实要点覆盖率 | 0.583 | **1.000** |
-| 引用正确率（回答文本内） | **0.750** | 0.667 |
-| 拒答合规率 | 0.875 | **0.917** |
-| 拒答—引用一致性 | **1.000** | 0.958 |
-| 幻觉引用数 / 总引用（文本） | **0 / 12** | 3 / 18 |
-| **API 层结构化引用正确率** | 0.750 | **0.917** |
-| **API 层结构化幻觉引用** | **0** | **0** |
+### 端到端（规则版，修正口径后）
 
-**核心发现**：LLM 编排把工具路由与事实覆盖分别提升 25.0 / 41.7 个百分点，
-但它在**回答文本里自己写的引用不可信**（编造库外标准号、用标准号冒充条款 id）。
-而 API 层的结构化引用由 `build_references()` 从工具结果确定性提取，
-幻觉为 0——**引用安全应当由代码保证，而不是靠模型遵守格式**。
-改进方向见报告第 9.4 节。
+24 个用例中，18 个可评路由/事实的领域用例；OOD 用例不送分，空 `must_mention` 不计事实通过，伪造条款计入引用错误。
 
-所有指标均可复现，且**已知短板都写在报告里**（分块收益未达统计显著、
-离线 provider 无法做语义拒答、LLM 侧为非确定性单次运行）。
+| 指标 | 规则版 |
+|---|---:|
+| 工具路由正确率 | 0.611（11/18） |
+| 事实要点覆盖率 | 0.444（8/18） |
+| 引用正确率（文本） | 0.750 |
+| 拒答合规率 | 0.750 |
+| 拒答—引用一致性 | 1.000 |
+| 幻觉引用数 / 总引用 | 0 / 22（编造条款 0） |
+| API 层结构化引用正确率 | 0.750 |
+| API 层结构化幻觉引用 | 0 |
+
+LLM 版历史单次运行（glm-4-flash）不作为当前可复现结论；它需要 API Key，未按新口径重跑。工具路由的 60/60 是**规则版确定性回归集**，不是 LLM 准确率。
+
+## 快速开始
+
+环境：Python 3.11–3.12（`pyproject.toml` 声明 `<3.14`）。
+
+```bash
+python -m venv .venv
+source .venv/bin/activate            # Windows: .venv\Scripts\activate
+python -m pip install -e ".[dev]"
+USE_REAL_EMBEDDINGS=0 uvicorn backend.main:app --reload
+```
+
+可选：真实 BGE Embedding
+
+```bash
+python -m pip install -e ".[rag]"
+USE_REAL_EMBEDDINGS=1 EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5 uvicorn backend.main:app
+```
+
+`.env` 现在会被 `python-dotenv` 自动加载；Docker Compose 也会读取它。不要把真实 Key 提交到仓库。
+
+## 评测命令
+
+```bash
+python -m backend.evaluation.eval_agent             # 60 条规则工具路由回归
+python -m backend.evaluation.eval_rag               # 离线 hash 检索/拒答 guardrail
+python -m backend.evaluation.eval_rag --all --sweep # 两套集 + 阈值扫描
+python -m backend.evaluation.eval_e2e --answerer rule
+python scripts/record_checks.py --coverage-fail-under 70
+```
+
+`reports/`、`backend/evaluation/eval_result.json` 是运行产物，已被 gitignore；CI 会重新生成并上传 artifact。
+
+## 测试
+
+```bash
+python -m pytest -q
+```
+
+当前 20 项测试，覆盖 RAG、健康检查、日报路径校验、Agent 降级、规则 Agent 分支、预测特征无泄漏和实时工具数据传递。CI 使用 Python 3.11，先做 editable + wheel 安装门禁，再跑测试、工具路由回归和覆盖率检查。
 
 ## 相关文档
 
 | 文档 | 内容 |
 |---|---|
-| **[docs/WORKLOG.md](docs/WORKLOG.md)** | 工作记录留档：提交时间线、分项结论、最终指标、待办清单、环境变更 |
-| **[docs/RAG_EVAL_REPORT.md](docs/RAG_EVAL_REPORT.md)** | 评测整改报告：4 个发现、消融数据、统计检验、诚实边界 |
-| **[docs/CODE_AUDIT.md](docs/CODE_AUDIT.md)** | 代码与数据审查报告：7 项修复、9 项已知局限 |
-| [docs/CASE_STUDY.md](docs/CASE_STUDY.md) | 项目案例研究（Agent 设计与评测方法） |
+| [docs/WORKLOG.md](docs/WORKLOG.md) | 工作记录与提交时间线 |
+| [docs/RAG_EVAL_REPORT.md](docs/RAG_EVAL_REPORT.md) | 检索/拒答评测与消融 |
+| [docs/CODE_AUDIT.md](docs/CODE_AUDIT.md) | 代码与数据审查 |
+| [docs/CASE_STUDY.md](docs/CASE_STUDY.md) | Agent 设计与评测方法 |
 
-## 运行
+## 已知局限
 
-```bash
-python -m pip install -e ".[dev]"
-USE_REAL_EMBEDDINGS=0 uvicorn backend.main:app --reload
-python -m backend.evaluation.eval_rag
-python scripts/record_checks.py
-```
+- 检索是**进程内 NumPy 索引**，不是 PostgreSQL/pgvector；数据量扩大后需要真正的向量库。
+- LLM 规划是 JSON 计划解析，不是原生 Function Calling。
+- 24 小时标准阈值与单小时浓度的比较仍属于筛查口径；生产使用应改为滚动 24 小时均值或明确分级。
+- 拒答集与检索集存在重叠，阈值未做训练/留出拆分；不要把它当成独立泛化指标。
+- 分块策略的收益没有在仓库中提供可复现的 bootstrap 显著性检验。
+- 预测模型已移除滚动特征的当前行泄漏并在评估后全量重训；历史 R²/recall 数字不再作为承诺。
+- LLM 输出非确定性，历史单次 E2E 结果不作为当前可复现指标。
+- 日报接口已校验日期和路径，生成接口需要 `ADMIN_API_TOKEN`；`/api/traces` 等调试接口在生产部署前需要加鉴权。
 
-启用真实 BGE 后跑两套集的对比表与拒答阈值扫描：
+## License
 
-```bash
-python -m backend.evaluation.eval_rag --all --sweep
-```
-
-其余评测与基准：
-
-```bash
-python -m backend.evaluation.bench_chunking        # 分块策略 A/B
-python -m backend.evaluation.bench_tool_parallel   # 工具并发基准
-python -m backend.evaluation.eval_e2e              # 端到端（规则版基线）
-python -m backend.evaluation.eval_e2e --answerer both   # 规则版 vs LLM 版对比
-```
-
-启用真实 BGE Embedding：
-
-```bash
-python -m pip install -e ".[rag,mlops]"
-USE_REAL_EMBEDDINGS=1 EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5 uvicorn backend.main:app
-```
-
-## 新增接口
-
-- `POST /api/rag/search`：混合检索并返回引用。
-- `POST /api/rag/reindex`：需配置 `ADMIN_API_TOKEN` 并通过 `X-Admin-Token` 调用。
-- `POST /api/feedback`：记录 trace_id、评分、评论和期望工具。
-
-## 结果记录
-
-`reports/quality/` 保存测试、覆盖率和静态检查结果；`reports/rag_eval/` 保存全部样本级检索结果与摘要；
-`reports/bench/` 保存分块策略与工具并发基准；`reports/e2e/` 保存端到端评测明细；启用 MLflow 后同时记录参数和指标。
-
-## 结果边界
-
-* **离线确定性 Embedding（hash-v1）只用于 CI 回归**，它无法区分"领域内口语化提问"与
-  "领域外问题"（实测不存在可行拒答阈值），其检索与拒答指标不代表线上能力。
-* 知识库当前仅 11 篇文档，检索本质是 11 路分类，绝对指标偏高，**不要外推到生产规模**。
-* 拒答阈值随 embedding 的相似度尺度变化，**换模型必须重新标定**
-  （`python -m backend.evaluation.eval_rag --sweep`）。
-* **LLM 侧为单次运行**：大模型输出非确定性，引用类指标在不同运行间有波动，
-  尚未多次取平均；且未统计 token 成本。
-* **分块策略的收益未达统计显著**（配对 bootstrap 95% CI 跨零），采用结构分块的依据是
-  "不切断条款"的结构性正确性，不是分数提升。
-* 外部 LLM 回答质量与实时数据源需配置模型/API 后单独运行，不将离线指标冒充线上效果。
+MIT。见 [LICENSE](LICENSE)。

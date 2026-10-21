@@ -8,6 +8,9 @@ __pycache__/
 htmlcov/
 .venv/
 venv/
+dist/
+build/
+*.egg-info/
 
 # 密钥与本地配置：绝不能提交
 .env
@@ -17,8 +20,9 @@ venv/
 
 # 运行时产物：由接口调用/调度生成，不应提交
 backend/data/feedback.jsonl
-data/reports/*.md
-!data/reports/2026-09-02.md
+data/reports/
+reports/
+backend/evaluation/eval_result.json
 
 # Local runtime state
 *.log

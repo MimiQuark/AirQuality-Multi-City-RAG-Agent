@@ -138,12 +138,15 @@ def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[
     cited_ids, cited_standards, cited_clauses = extract_answer_citations(answer)
 
     if case.category == "ood":
-        # 超纲用例不评判工具选择：先调检索确认库里没有、再拒答，才是正确行为
-        routing_ok = True
+        # OOD 不判断工具选择，也不能把“不适用”当成“正确”送分。
+        routing_ok = None
     else:
         routing_ok = set(actual_tools) == set(case.expected_tools)
 
-    facts_ok = all(any(alt in answer for alt in group) for group in case.must_mention) if case.must_mention else True
+    if case.must_mention:
+        facts_ok = all(any(alt in answer for alt in group) for group in case.must_mention)
+    else:
+        facts_ok = None
 
     # 引用正确性：id 必须真实存在；政策题还必须命中期望条款之一
     valid_ids = [i for i in cited_ids if i in kb_ids]
@@ -151,9 +154,11 @@ def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[
     fake_standards = [s for s in cited_standards if s not in kb_standards]
     fake_clauses = [c for c in cited_clauses if c not in kb_clauses]
     if case.category == "policy" and case.expected_citation_ids:
-        citation_ok = bool(set(valid_ids) & set(case.expected_citation_ids))
+        citation_ok = bool(set(valid_ids) & set(case.expected_citation_ids)) and not (
+            fake_ids or fake_standards or fake_clauses
+        )
     else:
-        citation_ok = not fake_ids and not fake_standards
+        citation_ok = not fake_ids and not fake_standards and not fake_clauses
 
     # API 层结构化引用（orchestrator.build_references 从工具结果确定性提取）
     structured_ids = [ref.get("id", "") for ref in (result.get("references") or [])
@@ -186,6 +191,8 @@ def evaluate_case(case: Case, result: dict, kb_ids: set[str], kb_standards: set[
 
 def summarize(rows: list[dict]) -> dict:
     n = len(rows)
+    routing_rows = [r for r in rows if r["routing_ok"] is not None]
+    fact_rows = [r for r in rows if r["facts_ok"] is not None]
     halluc = sum(len(r["hallucinated_ids"]) + len(r["hallucinated_standards"])
                  + len(r["hallucinated_clauses"]) for r in rows)
     # 分母与分子同口径：文本里出现的 id / 标准号 / 条款编号三类引用都计入
@@ -193,8 +200,16 @@ def summarize(rows: list[dict]) -> dict:
                       for r in rows)
     return {
         "cases": n,
-        "tool_routing_accuracy": sum(r["routing_ok"] for r in rows) / n,
-        "fact_coverage": sum(r["facts_ok"] for r in rows) / n,
+        "routing_applicable_cases": len(routing_rows),
+        "fact_applicable_cases": len(fact_rows),
+        "tool_routing_accuracy": (
+            sum(bool(r["routing_ok"]) for r in routing_rows) / len(routing_rows)
+            if routing_rows else None
+        ),
+        "fact_coverage": (
+            sum(bool(r["facts_ok"]) for r in fact_rows) / len(fact_rows)
+            if fact_rows else None
+        ),
         "citation_correctness": sum(r["citation_ok"] for r in rows) / n,
         "refusal_compliance": sum(r["refusal_ok"] for r in rows) / n,
         "refusal_citation_consistency": sum(r["consistency_ok"] for r in rows) / n,
@@ -221,6 +236,10 @@ def run(answerer_kind: str) -> dict:
     return {"answerer": label, "metrics": summarize(rows), "results": rows}
 
 
+def _fmt(value) -> str:
+    return "-" if value is None else f"{value:.3f}"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--answerer", choices=["rule", "llm", "both"], default="rule")
@@ -236,17 +255,24 @@ def main() -> int:
         reports.append(report)
         m = report["metrics"]
         print(f"=== 作答器: {report['answerer']} ===")
-        print(f"  工具路由正确率        {m['tool_routing_accuracy']:.3f}")
-        print(f"  事实要点覆盖率        {m['fact_coverage']:.3f}")
-        print(f"  引用正确率            {m['citation_correctness']:.3f}")
+        print(f"  工具路由正确率        {_fmt(m['tool_routing_accuracy'])}"
+              f"  (分母 {m['routing_applicable_cases']})")
+        print(f"  事实要点覆盖率        {_fmt(m['fact_coverage'])}"
+              f"  (分母 {m['fact_applicable_cases']})")
+        print(f"  引用正确率            {_fmt(m['citation_correctness'])}")
         print(f"  拒答合规率            {m['refusal_compliance']:.3f}")
         print(f"  拒答—引用一致性       {m['refusal_citation_consistency']:.3f}")
         print(f"  幻觉引用数 / 总引用数  {m['hallucinated_citations']} / {m['cited_citations']}"
               f"   (其中编造条款编号 {m['hallucinated_clauses']} 处)")
         print(f"  └ API层结构化引用正确率 {m['structured_citation_correctness']:.3f}"
               f"   结构化幻觉引用 {m['structured_hallucinated_citations']} 处")
-        failed = [r["id"] for r in report["results"]
-                  if not (r["routing_ok"] and r["facts_ok"] and r["citation_ok"] and r["refusal_ok"])]
+        failed = [
+            r["id"] for r in report["results"]
+            if r["routing_ok"] is False
+            or r["facts_ok"] is False
+            or not r["citation_ok"]
+            or not r["refusal_ok"]
+        ]
         print(f"  未完全通过的用例: {', '.join(failed) if failed else '无'}")
         print()
 
@@ -265,9 +291,9 @@ def main() -> int:
             f"## 作答器：{report['answerer']}", "",
             "| 指标 | 数值 |", "|---|---:|",
             f"| 用例数 | {m['cases']} |",
-            f"| 工具路由正确率 | {m['tool_routing_accuracy']:.3f} |",
-            f"| 事实要点覆盖率 | {m['fact_coverage']:.3f} |",
-            f"| 引用正确率 | {m['citation_correctness']:.3f} |",
+            f"| 工具路由正确率 | {_fmt(m['tool_routing_accuracy'])} (分母 {m['routing_applicable_cases']}) |",
+            f"| 事实要点覆盖率 | {_fmt(m['fact_coverage'])} (分母 {m['fact_applicable_cases']}) |",
+            f"| 引用正确率 | {_fmt(m['citation_correctness'])} |",
             f"| 拒答合规率 | {m['refusal_compliance']:.3f} |",
             f"| 拒答—引用一致性 | {m['refusal_citation_consistency']:.3f} |",
             f"| 幻觉引用数 / 总引用数 | {m['hallucinated_citations']} / {m['cited_citations']} |",

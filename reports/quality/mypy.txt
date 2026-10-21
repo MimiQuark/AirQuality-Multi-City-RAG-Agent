@@ -1,4 +1,0 @@
-$ E:\Anaconda\python.exe -m mypy backend/config.py backend/rag backend/feedback.py
-
-Success: no issues found in 6 source files
-

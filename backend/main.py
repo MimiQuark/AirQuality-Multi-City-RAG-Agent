@@ -1,5 +1,5 @@
 """
-多 Agent 协作环境监测系统 - FastAPI 入口 (v2.1)
+多 Agent 协作环境监测系统 - FastAPI 入口 (v2.2)
 新增: /api/chat/agent  -> LangGraph Agent 智能问答
 保留: /api/*           -> 原有数据接口兼容
 """
@@ -68,7 +68,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="多城市空气质量监测 AI 系统",
     description="多 Agent 协作架构 | Function Calling + RAG + 时序预测",
-    version="2.1.0",
+    version="2.2.0",
     lifespan=lifespan,
 )
 
@@ -208,6 +208,7 @@ def root():
 @app.post("/api/chat/agent", response_model=AgentChatResponse)
 def chat_agent(req: AgentChatRequest):
     """LangGraph Agent 智能问答入口（统一埋点：计时 + trace 落库）"""
+    _check_city(req.city)
     t0 = time.perf_counter()
     result = None
     err = None
@@ -279,13 +280,24 @@ def api_trace_stats():
 @app.get("/api/report/daily")
 def api_report_daily(date: Optional[str] = None):
     """读取日报（YYYY-MM-DD）；当天文件不存在时现场生成"""
-    return generate_daily_report(date)
+    try:
+        return generate_daily_report(date)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
 
 
 @app.post("/api/report/daily/generate")
-def api_report_daily_generate(date: Optional[str] = None):
+def api_report_daily_generate(
+    date: Optional[str] = None,
+    x_admin_token: Optional[str] = Header(None),
+):
     """强制重新生成日报（覆盖当天已有文件）"""
-    return generate_daily_report(date, force=True)
+    if app_settings.admin_api_token and x_admin_token != app_settings.admin_api_token:
+        raise HTTPException(403, "admin token required")
+    try:
+        return generate_daily_report(date, force=True)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
 
 
 # ============================================================
@@ -296,8 +308,9 @@ def api_report_daily_generate(date: Optional[str] = None):
 def health():
     return {
         "status": "ok",
-        "service": "多城市空气质量监测AI系统 v2.1",
+        "service": "多城市空气质量监测AI系统 v2.2",
         "chat_mode": LLM_PROVIDER if llm_configured() else "rule-fallback",
+        "agent_mode": "llm" if LLM_API_KEY and LLM_API_KEY != "sk-demo" else "rule",
         "chat_error": get_last_error() if llm_configured() else "",
         "realtime": "waqi" if realtime_configured() else "offline",
         "agent": "enabled",

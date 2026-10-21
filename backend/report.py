@@ -13,6 +13,7 @@ import os
 import threading
 import logging
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 from backend.tools.implementations import execute_tool
@@ -35,7 +36,15 @@ DATA_BASIS_NOTE = "数据口径：CAMS 再分析历史基座（近一年小时�
 
 
 def _report_path(date_str: str) -> str:
-    return os.path.join(REPORT_DIR, f"{date_str}.md")
+    try:
+        parsed = datetime.strptime(date_str, "%Y-%m-%d")
+    except (TypeError, ValueError) as exc:
+        raise ValueError("date must be YYYY-MM-DD") from exc
+    root = Path(REPORT_DIR).resolve()
+    path = (root / f"{parsed.date().isoformat()}.md").resolve()
+    if root not in path.parents:
+        raise ValueError("date resolves outside the report directory")
+    return str(path)
 
 
 def _try_llm_summary(md_context: str) -> Optional[str]:

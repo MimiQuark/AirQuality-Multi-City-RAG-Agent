@@ -1,0 +1,11 @@
+.env
+.env.*
+.launcher_config.json
+.venv/
+venv/
+__pycache__/
+*.pyc
+backend/models/*.pkl
+reports/
+data/reports/
+.git/

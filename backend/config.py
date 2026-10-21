@@ -4,6 +4,13 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:  # .env support is optional at runtime
+    pass
+
 
 def _optional_float(name: str) -> float | None:
     """读取可选的数值型环境变量；未设置时返回 None（表示"用默认标定值"）。"""

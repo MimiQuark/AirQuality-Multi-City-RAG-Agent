@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 
-from backend import engine
+from backend import engine, realtime
 
 # ============================================================
 # 1. Tool Schema 定义（Pydantic BaseModel）
@@ -81,7 +81,10 @@ def tool_get_forecast(city: str = "beijing", pollutant: str = "PM25") -> Dict[st
             p = "PM25"
         if p not in engine.POLLUTANTS:
             return {"error": f"不支持 {pollutant}，可选: {engine.POLLUTANTS}"}
-        live = engine.realtime.fetch_realtime(city) if hasattr(engine, 'realtime') else None
+        try:
+            live = realtime.fetch_realtime(city)
+        except Exception:
+            live = None
         return engine.get_forecast_alerts(df, p, city, live=live)[0]
     except Exception as e:
         return {"error": str(e)}

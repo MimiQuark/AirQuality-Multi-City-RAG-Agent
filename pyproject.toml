@@ -18,12 +18,19 @@ dependencies = [
   "requests>=2.31,<3",
   "langgraph>=0.2,<2",
   "langchain-openai>=0.1,<2",
+  "python-dotenv>=1.0,<2",
 ]
 
 [project.optional-dependencies]
-rag = ["sentence-transformers>=3,<6", "psycopg[binary]>=3.2,<4", "pgvector>=0.3,<1"]
+rag = ["sentence-transformers>=3,<6"]
 mlops = ["mlflow>=2.18,<4", "optuna>=3.6,<5"]
 dev = ["pytest>=8,<9", "pytest-cov>=6,<8", "httpx>=0.27,<1", "ruff>=0.8,<1", "mypy>=1.13,<2"]
+
+[tool.setuptools.packages.find]
+include = ["backend*"]
+
+[tool.setuptools.package-data]
+backend = ["rag/documents/*.json", "data/*.csv"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

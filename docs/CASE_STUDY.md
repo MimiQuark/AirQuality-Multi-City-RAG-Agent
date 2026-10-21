@@ -17,7 +17,7 @@
 ```mermaid
 flowchart TD
     Q[用户问题] --> ROUTER[意图路由]
-    ROUTER -->|单跳| FC[Function Calling]
+    ROUTER -->|单跳| FC[LLM JSON 工具规划]
     ROUTER -->|多跳| LG[LangGraph 编排]
     FC --> TOOLS[10 个领域工具]
     LG --> TOOLS
@@ -44,7 +44,7 @@ flowchart TD
 - 多城市对比、季节分析、污染物相关性。
 - 当前告警、综合预警、模型训练、政策条款检索。
 
-工具选择采用 Function Calling Schema 统一描述，规则版与 LLM 版共享同一套工具，避免两套业务逻辑。实时数据未配置 WAQI Token 时自动回退到历史数据；政策检索使用轻量归一化打分，并设置相似度阈值。
+工具选择采用 JSON 调用计划统一描述，规则版与 LLM 版共享同一套工具，避免两套业务逻辑。实时数据未配置 WAQI Token 时自动回退到历史数据；政策检索使用轻量归一化打分，并设置相似度阈值。
 
 ## 四、评测方法与真实结果
 
@@ -74,7 +74,7 @@ LLM 接口不可用或未配置时，系统自动切换到规则版 Agent。这�
 
 ### 3. Trace 作为评测闭环
 
-每次问答都会写入 SQLite，记录 prompt、响应、延迟和工具调用。线上 bad case 可以进入评测集，再通过回归测试验证修复效果。
+仅 `/api/chat/agent` 写入 SQLite trace（问题、回答、延迟、工具调用）；不记录完整 system/user prompt。线上 bad case 可以进入评测集，再通过回归测试验证修复效果。
 
 ### 4. 规则版作为可验证基线
 
@@ -82,7 +82,7 @@ LLM 版引入的不确定性较高，规则版则提供确定、可重复的基�
 
 ## 六、验证与运行
 
-健康检查实测返回 `200`，应用包含 35 条路由，新增的 `tests/test_health.py` 会验证 `status=ok` 和 `agent=enabled`。预测模型不随仓库提交，首次预测会从空气质量数据自动训练并缓存。
+健康检查实测返回 `200`，应用包含 30+ 条 HTTP 路由（含 docs/static），新增的 `tests/test_health.py` 会验证 `status=ok` 和 `agent=enabled`。预测模型不随仓库提交，首次预测会从空气质量数据自动训练并缓存。
 
 ```bash
 pip install -r requirements.txt

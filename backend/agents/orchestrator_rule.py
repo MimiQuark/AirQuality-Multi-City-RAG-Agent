@@ -54,7 +54,11 @@ def rule_based_plan(text: str, default_city: str = "beijing") -> List[Dict[str, 
     pollutant = extract_pollutant(text, "PM25")
     
     # 1. 城市对比
-    if any(k in text for k in ["对比", "比较", "排名", "哪个城市", "各城市", "六个城市", "6个城市"]):
+    cities_in_text = [alias for alias in CITY_MAP if alias in text_lower]
+    if (
+        any(k in text for k in ["对比", "比较", "排名", "哪个城市", "各城市", "六个城市", "6个城市"])
+        or (len(cities_in_text) >= 2 and "哪个" in text)
+    ):
         return [{"tool": "get_cities_comparison", "params": {}}]
 
     # 2. 政策/标准/健康知识查询（RAG，可与数据工具组合）
@@ -115,7 +119,7 @@ def rule_based_plan(text: str, default_city: str = "beijing") -> List[Dict[str, 
     return [{"tool": "get_overview", "params": {"city": city}}]
 
 
-def rule_based_synthesize(question: str, tool_results: List[Dict]) -> str:
+def rule_based_synthesize(question: str, tool_results: List[Dict], city: str | None = None) -> str:
     """
     基于规则的结果综合（简化版，展示 Agent 工作流）
     实际生产环境应使用 LLM 综合
@@ -208,12 +212,39 @@ def rule_based_synthesize(question: str, tool_results: List[Dict]) -> str:
                     lines.append(f"  🔵 {a.get('category', '')}{a.get('level_name', '')}: {a.get('value', '-')}{a.get('unit', '')}")
                 parts.append("\n".join(lines))
         
+        elif tool_name == "get_alerts":
+            city_name = (result[0].get("station") if result else "") or city or ""
+            if not result:
+                parts.append(f"{city_name}当前无阈值告警")
+            else:
+                lines = [f"{city_name}当前阈值告警:"]
+                for alert in result:
+                    lines.append(
+                        f"  {alert.get('metric', '')}: {alert.get('value', '-')} "
+                        f"(阈值 {alert.get('threshold', '-')}, {alert.get('level', '')})"
+                    )
+                parts.append("\n".join(lines))
+
+        elif tool_name == "train_models":
+            models = result.get("models", {}) if isinstance(result, dict) else {}
+            if not models:
+                parts.append(f"模型训练未返回结果: {result}")
+            else:
+                lines = [f"{city or '该城市'}模型训练完成:"]
+                for target, metrics in models.items():
+                    lines.append(
+                        f"  {target}: MAE={metrics.get('mae', '-')}, "
+                        f"RMSE={metrics.get('rmse', '-')}, R2={metrics.get('r2', '-')}"
+                    )
+                parts.append("\n".join(lines))
+
         elif tool_name == "get_season_analysis":
-            lines = [f"季节分析:"]
+            prefix = f"{city or '该城市'}季节分析" if city else "季节分析"
+            lines = [f"{prefix}:"]
             for s in result:
                 lines.append(f"  {s.get('season', '')}: {s.get('avg_pm25', '-')} μg/m³")
             parts.append("\n".join(lines))
-        
+
         elif tool_name == "get_correlation":
             # 简化展示 PM2.5 与温度、湿度的相关性
             pm25_row = None
@@ -222,8 +253,9 @@ def rule_based_synthesize(question: str, tool_results: List[Dict]) -> str:
                     pm25_row = row
                     break
             if pm25_row:
+                prefix = f"{city or '该城市'}" if city else ""
                 parts.append(
-                    f"PM2.5相关性:\n"
+                    f"{prefix}PM2.5相关性:\n"
                     f"  与温度: {pm25_row.get('temperature', '-')}\n"
                     f"  与湿度: {pm25_row.get('humidity', '-')}\n"
                     f"  与风速: {pm25_row.get('wind_speed', '-')}"
@@ -244,7 +276,7 @@ def run_agent_rule_based(question: str, city: str = "beijing", **kwargs) -> Dict
     tool_results = execute_tool_calls_sync(tool_calls, city)
     
     # 3. 结果综合
-    answer = rule_based_synthesize(question, tool_results)
+    answer = rule_based_synthesize(question, tool_results, city)
 
     # 4. 引用溯源：从工具结果中确定性地提取 references
     #    （不依赖模型自觉，规则模式下引用 100% 可追溯）

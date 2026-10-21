@@ -30,7 +30,7 @@ flowchart TD
     RAG --> R2[相似度阈值]
     RAG --> R3[引用与拒答]
 
-    TRACE --> X1[prompt / response]
+    TRACE --> X1[question / response]
     TRACE --> X2[工具调用 / 延迟]
     TRACE --> X3[SQLite trace]
 
@@ -46,7 +46,7 @@ flowchart TD
     Q[用户问题] --> KEY{是否配置 LLM_API_KEY}
     KEY -->|是| LLM[LangGraph Agent]
     KEY -->|否| RULE[规则版 Agent]
-    LLM --> FC[Function Calling]
+    LLM --> FC[LLM JSON 工具规划]
     RULE --> FC
     FC --> SINGLE{单跳还是多跳}
     SINGLE -->|单跳| T1[调用单个领域工具]
